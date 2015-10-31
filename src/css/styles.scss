@@ -1,0 +1,11 @@
+@charset 'utf-8';
+
+$primary-color: #ea222e;
+
+@import 'map'; // Map page base
+@import 'leaflet-overrides';
+
+body {
+  font-family: 'proxima-nova', sans-serif;
+  overflow: hidden;
+}

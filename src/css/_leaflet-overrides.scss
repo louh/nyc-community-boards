@@ -1,0 +1,9 @@
+// Inline the leaflet-geocoder styles
+@import '../../node_modules/pelias-leaflet-geocoder/dist/pelias-leaflet-geocoder.css';
+
+/* Hide zoom controls on mobile */
+@media only screen and (max-width: 650px) {
+  .leaflet-touch .leaflet-control-zoom {
+    display: none;
+  }
+}
