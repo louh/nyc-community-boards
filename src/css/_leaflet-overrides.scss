@@ -7,3 +7,23 @@
     display: none;
   }
 }
+
+.leaflet-pelias-control {
+  position: absolute;
+  left: $left-offset + $box-padding - 10px;
+  top: 74px;
+  width: 308px;
+  box-shadow: none;
+  border: 1px solid $ui-color;
+  border-radius: 2px;
+}
+
+.leaflet-bar {
+  box-shadow: none;
+  border: 1px solid $ui-color;
+  border-radius: 2px;
+}
+
+.leaflet-pelias-results {
+  left: -1px;
+}

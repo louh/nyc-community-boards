@@ -2,10 +2,38 @@
 
 $primary-color: #ea222e;
 
+$ui-color: #707070;
+$text-color: #292929;
+$left-offset: 16px;
+$box-padding: 16px;
+
 @import 'map'; // Map page base
 @import 'leaflet-overrides';
 
 body {
   font-family: 'proxima-nova', sans-serif;
   overflow: hidden;
+}
+
+.box {
+  position: absolute;
+  left: $left-offset;
+  top: 0;
+  width: 340px;
+  height: 300px;
+  box-shadow: 0 0 0 5px rgba(0,0,0,0.20), 0 1px 4px 0 rgba(0,0,0,0.30);
+  border-radius: 1px;
+  box-sizing: border-box;
+  padding: $box-padding;
+  z-index: 800;
+  background-color: white;
+  color: $text-color;
+}
+
+h1 {
+  margin: 0;
+  font-size: 19px;
+  border-bottom: 1px solid $ui-color;
+  padding-bottom: 8px;
+  color: $text-color;
 }

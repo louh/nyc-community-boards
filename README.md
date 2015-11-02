@@ -7,7 +7,10 @@ new york city community boards map
 
 This is NYC's official ["Find your community board" page](http://www.nyc.gov/html/cau/html/cb/cb.shtml). To look up your community board you have to figure out how to use their web GIS portal. Why don't we simplify that a little bit? This project is a minimum-viable product inspired by Washington, D.C.'s [ANC Finder](http://ancfinder.org/).
 
-This is a very good alternative: [Who Represents Me? NYC](http://www.mygovnyc.org/)
+These are some alternatives:
+
+- [Community Districts of New York City - Pediacities](http://nyc.pediacities.com/Community_Districts)
+- [Who Represents Me? NYC](http://www.mygovnyc.org/)
 
 ## Data sources
 

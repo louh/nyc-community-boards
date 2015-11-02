@@ -4,10 +4,19 @@ var L = require('leaflet')
 var Tangram = require('tangram') // via browserify-shim
 var LHash = require('leaflet-hash')
 var geocoder = require('pelias-leaflet-geocoder')
+var ajax = require('component-ajax')
 
 // Create a basic Leaflet map
 var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
-var map = L.map('map').setView([51.4700, 0.2592], 12)
+var map = L.map('map', {
+  zoomControl: false,
+  minZoom: 10,
+  maxBounds: [[40.9260, -74.2212], [40.4924, -73.6911]]
+}).setView([40.7223, -73.9692], 11)
+
+map.addControl(L.control.zoom({
+  position: 'topright'
+}))
 
 // var tileUrl = 'https://api.mapbox.com/v4/lou.n26nngnj/{z}/{x}/{y}.png'
 // if (window.devicePixelRatio >= 2) {
@@ -26,6 +35,16 @@ var layer = Tangram.leafletLayer({
   attribution: '&copy; OSM contributors | <a href="https://mapzen.com/">Mapzen</a>'
 }).addTo(map);
 
+ajax('/data/boundaries.geojson', {
+  success: function (response) {
+    console.log('uh')
+    console.log(response)
+  },
+  error: function () {
+    console.log('aasdas ')
+  }
+})
+
 // Add Pelias geocoding plugin
 var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   markers: false,
@@ -34,4 +53,6 @@ var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   polygonIcon: false,
   expanded: true,
   fullWidth: false,
+  bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
+  markers: true
 }).addTo(map);
