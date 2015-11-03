@@ -14,6 +14,9 @@ var map = L.map('map', {
   maxBounds: [[40.9260, -74.2212], [40.4924, -73.6911]]
 }).setView([40.7223, -73.9692], 11)
 
+// Set this manually for bundled Leaflet
+L.Icon.Default.imagePath = 'images/'
+
 map.addControl(L.control.zoom({
   position: 'topright'
 }))
