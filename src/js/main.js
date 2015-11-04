@@ -57,5 +57,6 @@ var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   expanded: true,
   fullWidth: false,
   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
-  markers: true
+  markers: true,
+  attribution: ''
 }).addTo(map);

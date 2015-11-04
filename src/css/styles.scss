@@ -21,14 +21,14 @@ body {
   top: 0;
   width: 340px;
   height: 300px;
-  box-shadow: 0 0 0 5px rgba(0,0,0,0.20), 0 1px 4px 0 rgba(0,0,0,0.30);
+  box-shadow: rgba(191,191,191, 0.5) 0px 0px 0px 5px;
   border-radius: 4px;
   box-sizing: border-box;
   padding: $box-padding;
   z-index: 800;
   background-color: white;
   color: $text-color;
-  border: 1px solid #777;
+  border: 1px solid #aaa;
   border-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
