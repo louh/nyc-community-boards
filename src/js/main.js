@@ -11,7 +11,6 @@ var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
 var map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
-  maxBounds: [[40.9260, -74.2212], [40.4924, -73.6911]]
 }).setView([40.7223, -73.9692], 11)
 
 // Set this manually for bundled Leaflet
@@ -34,6 +33,7 @@ var hash = new L.Hash(map)
 // Add Tangram scene layer
 var layer = Tangram.leafletLayer({
   leaflet: L,
+  modifyScrollWheel: false,
   scene: 'https://raw.githubusercontent.com/tangrams/refill/gh-pages/refill.yaml',
   attribution: '&copy; OSM contributors | <a href="https://mapzen.com/">Mapzen</a>'
 }).addTo(map);
