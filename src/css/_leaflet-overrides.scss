@@ -1,3 +1,6 @@
+// Inline the leaflet styles
+@import '../../node_modules/leaflet/dist/leaflet.css';
+
 // Inline the leaflet-geocoder styles
 @import '../../node_modules/pelias-leaflet-geocoder/dist/pelias-leaflet-geocoder.css';
 
@@ -8,22 +11,38 @@
   }
 }
 
-.leaflet-pelias-control {
-  position: absolute;
-  left: $left-offset + $box-padding - 10px;
-  top: 74px;
-  width: 308px;
-  box-shadow: none;
-  border: 1px solid $ui-color;
-  border-radius: 2px;
-}
-
 .leaflet-bar {
   box-shadow: none;
   border: 1px solid $ui-color;
   border-radius: 2px;
 }
 
+.leaflet-pelias-expanded {
+  height: 32px;
+}
+
+.leaflet-pelias-control {
+  position: absolute;
+  left: $left-offset + $box-padding - 10px;
+  top: 74px;
+  width: 268px;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+}
+
+.leaflet-pelias-control.leaflet-bar {
+}
+
+.leaflet-pelias-input {
+  border-bottom: 1px dotted #e1e1e1;
+}
+
+.leaflet-top .leaflet-pelias-results {
+  top: 32px;
+}
+
 .leaflet-pelias-results {
   left: -1px;
 }
+
