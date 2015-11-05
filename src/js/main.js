@@ -41,7 +41,11 @@ var layer = Tangram.leafletLayer({
 ajax({
   url: 'data/boundaries.geojson',
   success: function (response) {
-    L.geoJson(JSON.parse(response), {
+    // This is a string in local, but object on server
+    if (typeof response === 'string') {
+      response = JSON.parse(response)
+    }
+    L.geoJson(response, {
         style: {
           color: '#ff9999',
           fillColor: 'transparent',
