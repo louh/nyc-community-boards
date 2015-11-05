@@ -39,7 +39,7 @@ var layer = Tangram.leafletLayer({
 }).addTo(map);
 
 ajax({
-  url: '/data/boundaries.geojson',
+  url: '../data/boundaries.geojson',
   success: function (response) {
     L.geoJson(JSON.parse(response), {
         style: {
@@ -51,7 +51,7 @@ ajax({
     }).addTo(map)
   },
   error: function () {
-    console.log('aasdas ')
+    console.log('error getting boundary geojson')
   }
 })
 
