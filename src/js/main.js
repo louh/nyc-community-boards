@@ -13,7 +13,7 @@ var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
 var map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
-}).setView([40.7223, -73.9692], 11)
+}).setView([40.7114, -73.9716], 11)
 
 // Set this manually for bundled Leaflet
 L.Icon.Default.imagePath = 'images'
