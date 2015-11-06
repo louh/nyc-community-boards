@@ -32,13 +32,17 @@ body {
   border-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 h1 {
   margin: 0;
   font-size: 16px;
   border-bottom: 1px solid $ui-color;
-  padding-bottom: 8px;
+  padding-bottom: 2px;
   color: $text-color;
+}
+
+.result-area {
+  margin-top: 70px;
 }
