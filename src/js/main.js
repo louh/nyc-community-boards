@@ -26,6 +26,11 @@ map.addControl(L.control.zoom({
   position: 'topright'
 }))
 
+// If iframed, disable scroll wheel
+if (window.self !== window.top) {
+  map.scrollWheelZoom.disable()
+}
+
 // var tileUrl = 'https://api.mapbox.com/v4/lou.n26nngnj/{z}/{x}/{y}.png'
 // if (window.devicePixelRatio >= 2) {
 //   tileUrl = 'https://api.mapbox.com/v4/lou.n26nngnj/{z}/{x}/{y}@2x.png'
@@ -126,7 +131,7 @@ geocoder.setSelectedResult = function () {
   var bbox = turf.extent(districtGeo)
   // southwest latlng, northeast latlng
   map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
-    paddingTopLeft: [300, 0],
+    paddingTopLeft: [250, 0],
     animate: true
   })
 
