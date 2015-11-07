@@ -5,6 +5,10 @@ var Tangram = require('tangram') // via browserify-shim
 var LHash = require('leaflet-hash')
 var geocoder = require('pelias-leaflet-geocoder')
 var ajax = require('component-ajax')
+var extent = require('turf-extent')
+var turf = {
+  extent: extent
+}
 
 var search = require('./search')
 
@@ -83,6 +87,7 @@ var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   expanded: true,
   fullWidth: false,
   panToPoint: false,
+  autocomplete: false,
   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
   attribution: ''
 }).addTo(map);
@@ -116,6 +121,15 @@ geocoder.setSelectedResult = function () {
     style: districtStyle
   }).addTo(map)
 
+  // Zoom to bounds
+  // WSEN order (west, south, east, north)
+  var bbox = turf.extent(districtGeo)
+  // southwest latlng, northeast latlng
+  map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
+    paddingTopLeft: [300, 0],
+    animate: true
+  })
+
   var textEl = document.querySelector('.community-district-title')
 
   if (districtGeo.features.length > 0) {
@@ -127,11 +141,19 @@ geocoder.setSelectedResult = function () {
 }
 
 // Do not show any popups at all
+// showMarker() is rewritten to do custom stuff
 geocoder.origShowMarker = geocoder.showMarker
 geocoder.showMarker = function (text, coords) {
-  this.origShowMarker(text, coords)
-  this.marker.closePopup()
-  this.marker.unbindPopup()
+  this.removeMarkers();
+
+  var geo = [coords[1], coords[0]];
+  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {};
+
+  if (this.options.markers) {
+    this.marker = new L.marker(geo, markerOptions);
+    this._map.addLayer(this.marker);
+    this.markers.push(this.marker);
+  }
 }
 
 function getDistrictName(id) {
