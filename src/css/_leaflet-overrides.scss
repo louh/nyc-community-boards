@@ -24,7 +24,7 @@
 .leaflet-pelias-control {
   position: absolute;
   left: $left-offset + $box-padding - 10px;
-  top: 74px;
+  top: 70px;
   width: 268px;
   box-shadow: none;
   border: none;
@@ -35,7 +35,9 @@
 }
 
 .leaflet-pelias-input {
+  font-family: 'proxima-nova', sans-serif;
   border-bottom: 1px dotted #e1e1e1;
+  padding-left: 20px;
 }
 
 .leaflet-top .leaflet-pelias-results {
@@ -51,3 +53,13 @@
 // .leaflet-popup {
 //   display: none;
 // }
+
+.leaflet-pelias-close {
+  text-align: right;
+  width: 20px;
+}
+
+.leaflet-pelias-search-icon {
+  background-position: left center !important;
+  width: 20px !important;
+}
