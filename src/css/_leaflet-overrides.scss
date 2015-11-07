@@ -44,6 +44,8 @@
 
 .leaflet-pelias-results {
   left: -1px;
+  max-height: 170px !important;
+  overflow-y: auto;
 }
 
 // .leaflet-popup {
