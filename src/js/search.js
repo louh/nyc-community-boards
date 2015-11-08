@@ -28,13 +28,12 @@ ajax({
 // might be weird and overlap at edges
 // location - GeoJSON point from Pelias
 // districts - community boards GeoJSON
-function findDistricts (location, districts) {
+function findDistricts (location) {
   var results = []
-  districts = districts || DISTRICTS
 
   // Test all the districts
-  for (var i = 0; i < districts.features.length; i++) {
-    var polygon = districts.features[i]
+  for (var i = 0; i < DISTRICTS.features.length; i++) {
+    var polygon = DISTRICTS.features[i]
     if (turf.inside(location, polygon)) {
       results.push(polygon)
     }

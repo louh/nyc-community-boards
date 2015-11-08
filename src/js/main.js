@@ -12,6 +12,9 @@ var turf = {
 
 var search = require('./search')
 
+// Query string parsing
+var queryparams = getQueryParams()
+
 // Create a basic Leaflet map
 var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
 var map = L.map('map', {
@@ -106,7 +109,66 @@ geocoder.setSelectedResult = function () {
   this.origSetSelectedResult()
 
   // Need to get the coords off of selected result.
-  var coords = document.querySelector('.leaflet-pelias-selected').coords
+  var selected = document.querySelector('.leaflet-pelias-selected')
+  var query = selected.innerText || selected.textContent
+  var coords = selected.coords
+
+  var districtGeo = getDistrict(coords)
+
+  var textEl = document.querySelector('.community-district-title')
+
+  if (districtGeo.features.length > 0) {
+    var districtNum = districtGeo.features[0].properties.communityDistrict
+    textEl.textContent = getDistrictName(districtNum)
+  } else {
+    textEl.textContent = ''
+  }
+
+  // Set url
+  var querystring = '?query=' + encodeURIComponent(query)
+    + '&lat=' + encodeURIComponent(coords[1])
+    + '&lng=' + encodeURIComponent(coords[0])
+  console.log(querystring)
+  window.history.pushState({
+    lat: coords[1],
+    lng: coords[0],
+    query: query
+  }, null, querystring)
+}
+
+// Do not show any popups at all
+// showMarker() is rewritten to do custom stuff
+geocoder.origShowMarker = geocoder.showMarker
+geocoder.showMarker = function (text, coords) {
+  this.removeMarkers();
+
+  var geo = [coords[1], coords[0]];
+  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {};
+
+  if (this.options.markers) {
+    this.marker = new L.marker(geo, markerOptions);
+    this._map.addLayer(this.marker);
+    this.markers.push(this.marker);
+  }
+}
+
+// Prepopulate the geocoder input if there is something in query params
+window.setTimeout(function () {
+  if (queryparams) {
+    if (queryparams.query) {
+      geocoder._input.value = queryparams.query
+    }
+    if (queryparams.lat && queryparams.lng) {
+      queryparams.lat = window.parseFloat(queryparams.lat)
+      queryparams.lng = window.parseFloat(queryparams.lng)
+      var coords = [queryparams.lng, queryparams.lat]
+      var districtGeo = getDistrict(coords)
+      geocoder.showMarker(null, coords)
+    }
+  }
+}, 0)
+
+function getDistrict (coords) {
   var feature = {
     'type': 'Feature',
     'geometry': {
@@ -135,30 +197,7 @@ geocoder.setSelectedResult = function () {
     animate: true
   })
 
-  var textEl = document.querySelector('.community-district-title')
-
-  if (districtGeo.features.length > 0) {
-    var districtNum = districtGeo.features[0].properties.communityDistrict
-    textEl.textContent = getDistrictName(districtNum)
-  } else {
-    textEl.textContent = ''
-  }
-}
-
-// Do not show any popups at all
-// showMarker() is rewritten to do custom stuff
-geocoder.origShowMarker = geocoder.showMarker
-geocoder.showMarker = function (text, coords) {
-  this.removeMarkers();
-
-  var geo = [coords[1], coords[0]];
-  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {};
-
-  if (this.options.markers) {
-    this.marker = new L.marker(geo, markerOptions);
-    this._map.addLayer(this.marker);
-    this.markers.push(this.marker);
-  }
+  return districtGeo
 }
 
 function getDistrictName(id) {
@@ -189,4 +228,20 @@ function getDistrictName(id) {
     boardId = boardId.slice(1)
   }
   return boro + ' Community Board ' + boardId
+}
+
+function getQueryParams () {
+  var string = window.location.search.substr(1)
+  if (!string || string.length === 0) {
+    return undefined
+  }
+  var units = string.split('&')
+  var params = {}
+
+  for (var i = 0; i < units.length; i++) {
+    var pair = units[i].split('=')
+    params[pair[0]] = window.decodeURIComponent(pair[1])
+  }
+
+  return params
 }
