@@ -63,3 +63,22 @@
   background-position: left center !important;
   width: 20px !important;
 }
+
+.leaflet-touch {
+  .leaflet-pelias-control,
+  .leaflet-pelias-control.leaflet-pelias-expanded {
+    width: initial;
+  }
+  .leaflet-pelias-control.leaflet-bar {
+    border: 0;
+  }
+  .leaflet-pelias-results.leaflet-bar {
+    border-radius: 0;
+  }
+  .leaflet-pelias-results {
+    box-shadow: none;
+  }
+  .leaflet-pelias-control.leaflet-pelias-expanded {
+    line-height: initial;
+  }
+}
