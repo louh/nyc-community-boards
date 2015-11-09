@@ -2,7 +2,19 @@
 
 // get community board data after scraping the site.
 
+var MANHATTAN_SCRAPE_API = ''
 var BRONX_SCRAPE_API = 'https://www.kimonolabs.com/api/aaacwz8s?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
+var BROOKLYN_SCRAPE_API = ''
+var QUEENS_SCRAPE_API = ''
+var STATEN_ISLAND_SCRAPE_API = ''
+
+var SCRAPE_API = [
+  MANHATTAN_SCRAPE_API,
+  BRONX_SCRAPE_API,
+  BROOKLYN_SCRAPE_API,
+  QUEENS_SCRAPE_API,
+  STATEN_ISLAND_SCRAPE_API
+]
 
 // 1 - Manhattan
 // 2 - Bronx
@@ -16,6 +28,8 @@ var BRONX_SCRAPE_API = 'https://www.kimonolabs.com/api/aaacwz8s?apikey=k1MWSQDQs
 function getById (id) {
   var borough = getBoroughName(id)
   var boardNumber = normalizeBoardNumber(id)
+
+  var scraped = getScrapedData(borough, boardNumber)
 
   // Return all the data
   return {
@@ -57,6 +71,10 @@ function getBoroughName (id) {
       return null
   }
   return name
+}
+
+function getScrapedData (borough, boardNumber) {
+  return {}
 }
 
 module.exports = {

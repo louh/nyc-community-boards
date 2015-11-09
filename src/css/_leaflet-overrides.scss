@@ -11,7 +11,8 @@
   }
 }
 
-.leaflet-bar {
+.leaflet-bar,
+.leaflet-touch .leaflet-pelias-results.leaflet-bar {
   box-shadow: none;
   border: 1px solid $ui-color;
   border-radius: 2px;
@@ -50,10 +51,6 @@
   overflow-y: auto;
 }
 
-// .leaflet-popup {
-//   display: none;
-// }
-
 .leaflet-pelias-close {
   text-align: right;
   width: 20px;
@@ -67,18 +64,14 @@
 .leaflet-touch {
   .leaflet-pelias-control,
   .leaflet-pelias-control.leaflet-pelias-expanded {
-    width: initial;
+    width: 268px;
+    line-height: 32px;
+    height: 32px;
   }
   .leaflet-pelias-control.leaflet-bar {
     border: 0;
   }
-  .leaflet-pelias-results.leaflet-bar {
-    border-radius: 0;
-  }
   .leaflet-pelias-results {
     box-shadow: none;
-  }
-  .leaflet-pelias-control.leaflet-pelias-expanded {
-    line-height: initial;
   }
 }
