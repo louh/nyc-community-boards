@@ -11,6 +11,7 @@ var turf = {
 }
 
 var search = require('./search')
+var districts = require('./districts')
 
 // Query string parsing
 var queryparams = getQueryParams()
@@ -51,6 +52,8 @@ var layer = Tangram.leafletLayer({
   attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
 }).addTo(map);
 
+window.layer = layer
+
 var style = {
   color: '#ff9999',
   fillColor: 'transparent',
@@ -67,6 +70,36 @@ var districtStyle = {
 
 var boundaryLayer
 var districtLayer
+
+// var createObjectURL = (window.URL && window.URL.createObjectURL) || (window.webkitURL && window.webkitURL.createObjectURL)
+
+// layer.on('init', function () {
+//   ajax({
+//     url: 'data/boundaries.geojson',
+//     success: function (response) {
+//       // What if we injected this into Tangram
+//       var content = JSON.stringify(response)
+//       layer.scene.config.sources['city'] = {
+//         url: createObjectURL(new Blob([content]))
+//       }
+//       var layerStyle = {
+//         data: { source: 'city' },
+//         draw: {
+//           polygons: {
+//             order: 10,
+//             color: 'red',
+//             width: '10px'
+//           }
+//         }
+//       }
+//       layer.scene.config.layers['city'] = layerStyle
+//       layer.scene.rebuild()
+//     },
+//     error: function () {
+//       console.log('error getting boundary geojson')
+//     }
+//   })
+// })
 
 ajax({
   url: 'data/boundaries.geojson',
@@ -113,22 +146,12 @@ geocoder.setSelectedResult = function () {
   var query = selected.innerText || selected.textContent
   var coords = selected.coords
 
-  var districtGeo = getDistrict(coords)
-
-  var textEl = document.querySelector('.community-district-title')
-
-  if (districtGeo.features.length > 0) {
-    var districtNum = districtGeo.features[0].properties.communityDistrict
-    textEl.textContent = getDistrictName(districtNum)
-  } else {
-    textEl.textContent = ''
-  }
+  displayCommunityBoard(coords)
 
   // Set url
   var querystring = '?query=' + encodeURIComponent(query)
     + '&lat=' + encodeURIComponent(coords[1])
     + '&lng=' + encodeURIComponent(coords[0])
-  console.log(querystring)
   window.history.pushState({
     lat: coords[1],
     lng: coords[0],
@@ -140,15 +163,15 @@ geocoder.setSelectedResult = function () {
 // showMarker() is rewritten to do custom stuff
 geocoder.origShowMarker = geocoder.showMarker
 geocoder.showMarker = function (text, coords) {
-  this.removeMarkers();
+  this.removeMarkers()
 
-  var geo = [coords[1], coords[0]];
-  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {};
+  var geo = [coords[1], coords[0]]
+  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {}
 
   if (this.options.markers) {
-    this.marker = new L.marker(geo, markerOptions);
-    this._map.addLayer(this.marker);
-    this.markers.push(this.marker);
+    this.marker = new L.marker(geo, markerOptions)
+    this._map.addLayer(this.marker)
+    this.markers.push(this.marker)
   }
 }
 
@@ -162,13 +185,27 @@ window.setTimeout(function () {
       queryparams.lat = window.parseFloat(queryparams.lat)
       queryparams.lng = window.parseFloat(queryparams.lng)
       var coords = [queryparams.lng, queryparams.lat]
-      var districtGeo = getDistrict(coords)
+      var districtGeo = getDistrictGeo(coords)
       geocoder.showMarker(null, coords)
+      displayCommunityBoard(coords)
     }
   }
 }, 0)
 
-function getDistrict (coords) {
+// Render the community board view
+// TODO: Cache & share references to elements.
+function fillOutData (data) {
+  var textEl = document.querySelector('.community-district-title')
+  textEl.textContent = data.label
+}
+
+// Clear the community board view
+function clearData () {
+  var textEl = document.querySelector('.community-district-title')
+  textEl.textContent = ''
+}
+
+function getDistrictGeo (coords) {
   var feature = {
     'type': 'Feature',
     'geometry': {
@@ -200,34 +237,16 @@ function getDistrict (coords) {
   return districtGeo
 }
 
-function getDistrictName(id) {
-  var str = id.toString()
-  var boroId = window.parseInt(str.charAt(0), 10)
-  var boardId = str.substr(1)
-  var boro
-  switch (boroId) {
-    case 1:
-      boro = 'Manhattan'
-      break
-    case 2:
-      boro = 'Bronx'
-      break
-    case 3:
-      boro = 'Brooklyn'
-      break
-    case 4:
-      boro = 'Queens'
-      break
-    case 5:
-      boro = 'Staten Islamd'
-      break
-    default:
-      return null
+function displayCommunityBoard (coords) {
+  var districtGeo = getDistrictGeo(coords)
+
+  if (districtGeo.features.length > 0) {
+    var id = districtGeo.features[0].properties.communityDistrict
+    var data = districts.getById(id)
+    fillOutData(data)
+  } else {
+    clearData()
   }
-  if (boardId.charAt(0) === '0') {
-    boardId = boardId.slice(1)
-  }
-  return boro + ' Community Board ' + boardId
 }
 
 function getQueryParams () {
