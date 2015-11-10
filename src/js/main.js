@@ -223,8 +223,16 @@ window.setTimeout(function () {
 // Render the community board view
 // TODO: Cache & share references to elements.
 function fillOutData (data) {
-  var textEl = document.querySelector('.community-district-title')
-  textEl.textContent = data.label
+  console.log(data)
+  var dataEl = document.getElementById('board-info')
+  dataEl.style.display = 'block'
+
+  dataEl.querySelector('.community-board-label').textContent = data.label
+  dataEl.querySelector('.data.neighborhoods').textContent = data.data.neighborhoods
+  dataEl.querySelector('.data.address').textContent = data.data.address
+  dataEl.querySelector('.data.phone').textContent = data.data.phone
+  dataEl.querySelector('.data.email').textContent = data.data.email
+  dataEl.querySelector('.data.website').textContent = data.data.website.href
 
   document.getElementById('message').textContent = ''
   document.getElementById('intro').style.display = 'none'
@@ -232,13 +240,18 @@ function fillOutData (data) {
 
 // Clear the community board view
 function clearData () {
-  var textEl = document.querySelector('.community-district-title')
-  textEl.textContent = ''
+  var dataEl = document.getElementById('board-info')
+  var contents = dataEl.querySelectorAll('.data')
+  for (var i = 0, j = contents.length; i < j; i++) {
+    contents[i].textContent = ''
+  }
+  dataEl.style.display = 'none'
   document.getElementById('message').textContent = ''
   document.getElementById('intro').style.display = 'block'
 }
 
 function showMessage (msg) {
+  clearData()
   document.getElementById('message').textContent = msg
   document.getElementById('intro').style.display = 'none'
 }
@@ -291,9 +304,12 @@ function displayCommunityBoard (coords) {
   if (districtGeo && districtGeo.features.length > 0) {
     var id = districtGeo.features[0].properties.communityDistrict
     var data = districts.getById(id)
-    fillOutData(data)
+    if (data.error === true) {
+      showMessage(data.message)
+    } else {
+      fillOutData(data)
+    }
   } else {
-    clearData()
     showMessage('There is no community board at that address.')
   }
 }

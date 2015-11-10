@@ -57,6 +57,26 @@ h1 {
 }
 
 #message {
+  display: none;
   font-weight: bold;
   color: #ff4444;
+}
+
+#board-info {
+  display: none;
+}
+
+#intro {
+  display: block;
+}
+
+.community-board-label {
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 0;
 }
