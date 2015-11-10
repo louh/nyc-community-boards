@@ -35,12 +35,12 @@ function findDistricts (location) {
       foundNum = feature.properties.communityDistrict
       origId = feature.id
       results.push(feature)
+      break
     }
   }
 
   // "multi-polygon" support
-  // start over to capture districts it missed the
-  // first time
+  // start over to capture districts it missed the first time
   // TODO: optimize source geojson
   for (var i = 0; i < DISTRICTS.features.length; i++) {
     var feature = DISTRICTS.features[i]
@@ -50,9 +50,13 @@ function findDistricts (location) {
   }
 
   // Wrap in GeoJSON
-  return {
-    'type': 'FeatureCollection',
-    'features': results
+  if (results.length > 0) {
+    return {
+      'type': 'FeatureCollection',
+      'features': results
+    }
+  } else {
+    return null
   }
 }
 

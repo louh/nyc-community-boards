@@ -144,6 +144,9 @@ var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   attribution: ''
 }).addTo(map);
 
+// debug
+window.geocoder = geocoder
+
 // This augments geocoder functionality by rewiring internal
 // methods to do other stuff. There is no guarantee that these
 // internal methods will continue to be supported as is forever!
@@ -186,20 +189,34 @@ geocoder.showMarker = function (text, coords) {
   }
 }
 
+// Also hijack reset input to clear the view when we clear the
+// search input & marker
+geocoder.origResetInput = geocoder.resetInput
+geocoder.resetInput = function () {
+  this.origResetInput()
+  clearData()
+  if (districtLayer) {
+    map.removeLayer(districtLayer)
+  }
+}
+
 // Prepopulate the geocoder input if there is something in query params
 window.setTimeout(function () {
-  if (queryparams) {
-    if (queryparams.query) {
-      geocoder._input.value = queryparams.query
-    }
-    if (queryparams.lat && queryparams.lng) {
-      queryparams.lat = window.parseFloat(queryparams.lat)
-      queryparams.lng = window.parseFloat(queryparams.lng)
-      var coords = [queryparams.lng, queryparams.lat]
-      var districtGeo = getDistrictGeo(coords)
-      geocoder.showMarker(null, coords)
-      displayCommunityBoard(coords)
-    }
+  if (queryparams.query) {
+    geocoder._input.value = queryparams.query
+    geocoder._input.focus()
+    // Fire an event to hide the search box, which is empty
+    // at this point so it looks weird
+    geocoder._input.dispatchEvent(new KeyboardEvent('keyup', {
+      'cancelable': true
+    }))
+  }
+  if (queryparams.lat && queryparams.lng) {
+    queryparams.lat = window.parseFloat(queryparams.lat)
+    queryparams.lng = window.parseFloat(queryparams.lng)
+    var coords = [queryparams.lng, queryparams.lat]
+    geocoder.showMarker(null, coords)
+    displayCommunityBoard(coords)
   }
 }, 0)
 
@@ -208,12 +225,22 @@ window.setTimeout(function () {
 function fillOutData (data) {
   var textEl = document.querySelector('.community-district-title')
   textEl.textContent = data.label
+
+  document.getElementById('message').textContent = ''
+  document.getElementById('intro').style.display = 'none'
 }
 
 // Clear the community board view
 function clearData () {
   var textEl = document.querySelector('.community-district-title')
   textEl.textContent = ''
+  document.getElementById('message').textContent = ''
+  document.getElementById('intro').style.display = 'block'
+}
+
+function showMessage (msg) {
+  document.getElementById('message').textContent = msg
+  document.getElementById('intro').style.display = 'none'
 }
 
 function getDistrictGeo (coords) {
@@ -232,6 +259,16 @@ function getDistrictGeo (coords) {
 
   // Find and add district
   var districtGeo = search.findDistricts(feature)
+
+  // Exit now if there's no geo
+  if (!districtGeo) {
+    // zoom to the geo point anyway
+    map.setView([coords[1], coords[0]], 14, {
+      animate: true
+    })
+    return null
+  }
+
   districtLayer = L.geoJson(districtGeo, {
     style: districtStyle
   }).addTo(map)
@@ -251,20 +288,19 @@ function getDistrictGeo (coords) {
 function displayCommunityBoard (coords) {
   var districtGeo = getDistrictGeo(coords)
 
-  if (districtGeo.features.length > 0) {
+  if (districtGeo && districtGeo.features.length > 0) {
     var id = districtGeo.features[0].properties.communityDistrict
     var data = districts.getById(id)
     fillOutData(data)
   } else {
     clearData()
+    showMessage('There is no community board at that address.')
   }
 }
 
+// Returns empty object if no params
 function getQueryParams () {
   var string = window.location.search.substr(1)
-  if (!string || string.length === 0) {
-    return undefined
-  }
   var units = string.split('&')
   var params = {}
 

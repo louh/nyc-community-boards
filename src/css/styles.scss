@@ -20,7 +20,7 @@ body {
   left: $left-offset;
   top: 0;
   width: 300px;
-  height: 300px;
+  min-height: 300px;
   box-shadow: rgba(191,191,191, 0.5) 0px 0px 0px 5px;
   border-radius: 4px;
   box-sizing: border-box;
@@ -46,11 +46,17 @@ h1 {
 }
 
 .result-area {
-  margin-top: 70px;
+  margin-top: 50px;
+  line-height: 1.4;
 }
 
 .instructions {
   color: #999;
   font-style: italic;
   font-size: 12px;
+}
+
+#message {
+  font-weight: bold;
+  color: #ff4444;
 }
