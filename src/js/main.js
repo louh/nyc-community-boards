@@ -66,7 +66,7 @@ if (Modernizr && Modernizr.webgl === true
 }
 
 var style = {
-  color: '#ff9999',
+  color: '#bbb',
   fillColor: 'transparent',
   weight: 4,
   opacity: 0.5
@@ -230,7 +230,7 @@ function fillOutData (data) {
 
   dataEl.querySelector('.community-board-label').textContent = data.label
   dataEl.querySelector('.data.neighborhoods').textContent = data.data.neighborhoods
-  dataEl.querySelector('.data.address').textContent = data.data.address
+  dataEl.querySelector('.data.address').innerHTML = data.data.address.replace(/\\n/g, '<br>')
   dataEl.querySelector('.data.phone').textContent = data.data.phone
   dataEl.querySelector('.data.email').textContent = data.data.email
   dataEl.querySelector('.data.website').textContent = data.data.website.href
@@ -312,7 +312,7 @@ function displayCommunityBoard (coords) {
       fillOutData(data)
     }
   } else {
-    showMessage('There is no community board at that address.')
+    showMessage('This site only has results for New York City.')
   }
 }
 

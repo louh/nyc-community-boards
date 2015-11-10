@@ -26,7 +26,7 @@ body {
   box-sizing: border-box;
   padding: $box-padding;
   z-index: 800;
-  background-color: white;
+  background-color: #faf4f2;
   color: $text-color;
   border: 1px solid #aaa;
   border-top: 0;
@@ -48,10 +48,12 @@ h1 {
 .result-area {
   margin-top: 50px;
   line-height: 1.4;
-}
+  border-top: 1px solid $text-color;
+  padding-top: 3px;
+  }
 
 .instructions {
-  color: #999;
+  color: #888;
   font-style: italic;
   font-size: 12px;
 }
@@ -60,6 +62,7 @@ h1 {
   display: none;
   font-weight: bold;
   color: #ff4444;
+  margin-top: 10px;
 }
 
 #board-info {
@@ -68,6 +71,7 @@ h1 {
 
 #intro {
   display: block;
+  margin-top: 10px;
 }
 
 .community-board-label {
@@ -76,7 +80,7 @@ h1 {
 
 h3 {
   font-size: 12px;
-  color: #999;
+  color: #888;
   text-transform: uppercase;
   margin-bottom: 0;
 }
