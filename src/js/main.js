@@ -230,10 +230,11 @@ function fillOutData (data) {
 
   dataEl.querySelector('.community-board-label').textContent = data.label
   dataEl.querySelector('.data.neighborhoods').textContent = data.data.neighborhoods
-  dataEl.querySelector('.data.address').innerHTML = data.data.address.replace(/\\n/g, '<br>')
+  dataEl.querySelector('.data.address').innerHTML = data.data.address.replace(/\n/g, '<br>')
   dataEl.querySelector('.data.phone').textContent = data.data.phone
   dataEl.querySelector('.data.email').textContent = data.data.email
   dataEl.querySelector('.data.website').textContent = data.data.website.href
+  dataEl.querySelector('.data.website').href = data.data.website.href
 
   document.getElementById('intro').style.display = 'none'
 }
@@ -245,6 +246,7 @@ function clearData () {
   for (var i = 0, j = contents.length; i < j; i++) {
     contents[i].textContent = ''
   }
+  dataEl.querySelector('.data.website').href = ''
   dataEl.style.display = 'none'
   document.getElementById('message').textContent = ''
   document.getElementById('message').style.display = 'none'
