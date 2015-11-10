@@ -223,6 +223,7 @@ window.setTimeout(function () {
 // Render the community board view
 // TODO: Cache & share references to elements.
 function fillOutData (data) {
+  clearData()
   console.log(data)
   var dataEl = document.getElementById('board-info')
   dataEl.style.display = 'block'
@@ -234,7 +235,6 @@ function fillOutData (data) {
   dataEl.querySelector('.data.email').textContent = data.data.email
   dataEl.querySelector('.data.website').textContent = data.data.website.href
 
-  document.getElementById('message').textContent = ''
   document.getElementById('intro').style.display = 'none'
 }
 
@@ -247,12 +247,14 @@ function clearData () {
   }
   dataEl.style.display = 'none'
   document.getElementById('message').textContent = ''
+  document.getElementById('message').style.display = 'none'
   document.getElementById('intro').style.display = 'block'
 }
 
 function showMessage (msg) {
   clearData()
   document.getElementById('message').textContent = msg
+  document.getElementById('message').style.display = 'block'
   document.getElementById('intro').style.display = 'none'
 }
 
