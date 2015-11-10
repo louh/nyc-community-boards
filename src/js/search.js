@@ -22,20 +22,30 @@ ajax({
   }
 })
 
-// Given a lat-lng location, find the
-// districts they're inside
-// There is more than one because the borders
-// might be weird and overlap at edges
-// location - GeoJSON point from Pelias
-// districts - community boards GeoJSON
+// Given a lat-lng location, find the district it's inside
 function findDistricts (location) {
   var results = []
+  var foundNum
+  var origId
 
   // Test all the districts
   for (var i = 0; i < DISTRICTS.features.length; i++) {
-    var polygon = DISTRICTS.features[i]
-    if (turf.inside(location, polygon)) {
-      results.push(polygon)
+    var feature = DISTRICTS.features[i]
+    if (turf.inside(location, feature)) {
+      foundNum = feature.properties.communityDistrict
+      origId = feature.id
+      results.push(feature)
+    }
+  }
+
+  // "multi-polygon" support
+  // start over to capture districts it missed the
+  // first time
+  // TODO: optimize source geojson
+  for (var i = 0; i < DISTRICTS.features.length; i++) {
+    var feature = DISTRICTS.features[i]
+    if (feature.properties.communityDistrict === foundNum && feature.id !== origId) {
+      results.push(feature)
     }
   }
 

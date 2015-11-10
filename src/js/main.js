@@ -5,9 +5,8 @@ var Tangram = require('tangram') // via browserify-shim
 var LHash = require('leaflet-hash')
 var geocoder = require('pelias-leaflet-geocoder')
 var ajax = require('component-ajax')
-var extent = require('turf-extent')
 var turf = {
-  extent: extent
+  extent: require('turf-extent')
 }
 
 var search = require('./search')
@@ -26,6 +25,8 @@ var map = L.map('map', {
 // Set this manually for bundled Leaflet
 L.Icon.Default.imagePath = 'images'
 
+// Add zoom control back on upper right to
+// get out of the way of the search UI
 map.addControl(L.control.zoom({
   position: 'topright'
 }))
@@ -35,24 +36,34 @@ if (window.self !== window.top) {
   map.scrollWheelZoom.disable()
 }
 
-// var tileUrl = 'https://api.mapbox.com/v4/lou.n26nngnj/{z}/{x}/{y}.png'
-// if (window.devicePixelRatio >= 2) {
-//   tileUrl = 'https://api.mapbox.com/v4/lou.n26nngnj/{z}/{x}/{y}@2x.png'
-// }
-// L.tileLayer(tileUrl + '?access_token=' + accessToken, {
-//   attribution: 'Map imagery © <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Emoji by <a href="http://emojione.com/">Emoji One</a>'
-// }).addTo(map)
-
 var hash = new L.Hash(map)
 
 // Add Tangram scene layer
-var layer = Tangram.leafletLayer({
-  leaflet: L,
-  scene: 'https://raw.githubusercontent.com/tangrams/refill/gh-pages/refill.yaml',
-  attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
-}).addTo(map);
+// Modernizr only detects if browser is webgl-capable
+// but not if the browser has webgl disabled, so we have to manually check it
+// For debug reasons you can also just pass webgl=false in the params
+if (Modernizr && Modernizr.webgl === true
+    && !!(document.createElement('canvas').getContext('webgl') || document.createElement('canvas').getContext('experimental-webgl'))
+    && !(queryparams.webgl)) {
+  var layer = Tangram.leafletLayer({
+    leaflet: L,
+    scene: 'https://raw.githubusercontent.com/tangrams/refill/gh-pages/refill.yaml',
+    attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
+  }).addTo(map)
 
-window.layer = layer
+  // Debug
+  window.layer = layer
+} else {
+  // No WebGL fallback
+  var tileUrl = '//tile.stamen.com/toner/{z}/{x}/{y}.png'
+  // Retina tiles
+  if (window.devicePixelRatio >= 2) {
+    tileUrl = '//tile.stamen.com/toner/{z}/{x}/{y}@2x.png'
+  }
+  L.tileLayer(tileUrl, {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.',
+  }).addTo(map)
+}
 
 var style = {
   color: '#ff9999',
