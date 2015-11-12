@@ -16,3 +16,12 @@ These are some alternatives:
 
 - Community district GeoJSON from [data.beta.nyc](http://data.beta.nyc/dataset/nyc-community-districts/resource/d826bbc6-a376-4642-8d8b-3a700d701557). Here is the original data [as GIS shapefile](https://data.cityofnewyork.us/City-Government/Community-Districts/yfnk-k7r4).
 - Community board information from [NYC Mayor's Community Affairs Unit - Find Your Community Board](http://www.nyc.gov/html/cau/html/cb/cb.shtml)
+
+## Deploy
+
+There is a deploy script to send files to https-enabled surge.sh site. https://nyc-community-boards.surge.sh/
+
+```
+npm run deploy
+```
+
