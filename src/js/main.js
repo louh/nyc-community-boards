@@ -47,7 +47,7 @@ if (Modernizr && Modernizr.webgl === true
     && !(queryparams.webgl)) {
   var layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'https://raw.githubusercontent.com/tangrams/refill/gh-pages/refill.yaml',
+    scene: 'https://tangrams.github.io/refill-style/refill-style.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 
