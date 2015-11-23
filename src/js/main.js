@@ -23,8 +23,8 @@ var map = L.map('map', {
   minZoom: 10,
   // If iframed, disable scroll wheel
   scrollWheelZoom: (window.self === window.top) ? true : false,
-  // If iframed & touchscreen, disable touch zoom
-  touchZoom: (window.self !== window.top && L.Browser.touch) ? false : true,
+  // If iframed & touchscreen, disable dragging
+  dragging: (window.self !== window.top && L.Browser.touch) ? false : true,
 }).setView([40.7114, -73.9716], 11)
 
 // Set this manually for bundled Leaflet
