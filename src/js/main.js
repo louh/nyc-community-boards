@@ -17,9 +17,14 @@ var queryparams = getQueryParams()
 
 // Create a basic Leaflet map
 var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
+console.log(L.Browser.touch)
 var map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
+  // If iframed, disable scroll wheel
+  scrollWheelZoom: (window.self === window.top) ? true : false,
+  // If iframed & touchscreen, disable touch zoom
+  touchZoom: (window.self !== window.top && L.Browser.touch) ? false : true,
 }).setView([40.7114, -73.9716], 11)
 
 // Set this manually for bundled Leaflet
@@ -30,11 +35,6 @@ L.Icon.Default.imagePath = 'images'
 map.addControl(L.control.zoom({
   position: 'topright'
 }))
-
-// If iframed, disable scroll wheel
-if (window.self !== window.top) {
-  map.scrollWheelZoom.disable()
-}
 
 var hash = new L.Hash(map)
 
