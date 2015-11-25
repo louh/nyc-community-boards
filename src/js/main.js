@@ -17,7 +17,6 @@ var queryparams = getQueryParams()
 
 // Create a basic Leaflet map
 var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
-console.log(L.Browser.touch)
 var map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
@@ -47,7 +46,7 @@ if (Modernizr && Modernizr.webgl === true
     && !(queryparams.webgl)) {
   var layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'https://tangrams.github.io/refill-style/refill-style.yaml',
+    scene: 'https://cdn.rawgit.com/tangrams/refill-style/ef1259dbbcd5f47ad3e8bed1a27c4fcab9676b3c/refill-style.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 
