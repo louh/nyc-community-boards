@@ -20,7 +20,7 @@
   "main": "index.js",
   "dependencies": {
     "component-ajax": "0.0.2",
-    "leaflet": "^1.0.0-beta.2",
+    "leaflet": "0.7.5",
     "leaflet-hash": "^0.2.1",
     "pelias-leaflet-geocoder": "^1.0.1",
     "turf-extent": "^1.0.4",
