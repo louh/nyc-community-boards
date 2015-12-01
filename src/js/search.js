@@ -23,10 +23,18 @@ ajax({
 })
 
 // Given a lat-lng location, find the district it's inside
-function findDistricts (location) {
+function findDistricts (latlng) {
   var results = []
   var foundNum
   var origId
+
+  var location = {
+    'type': 'Feature',
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [latlng.lng, latlng.lat]
+    }
+  }
 
   // Test all the districts
   for (var i = 0; i < DISTRICTS.features.length; i++) {

@@ -148,56 +148,46 @@ var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
 // debug
 window.geocoder = geocoder
 
-// This augments geocoder functionality by rewiring internal
-// methods to do other stuff. There is no guarantee that these
-// internal methods will continue to be supported as is forever!
+// Custom behavior on selecting a result
+geocoder.on('select', function (e) {
+  var label = e.feature.properties.label
+  var latlng = e.latlng
 
-geocoder.origSetSelectedResult = geocoder.setSelectedResult
-geocoder.setSelectedResult = function () {
-  this.origSetSelectedResult()
-
-  // Need to get the coords off of selected result.
-  var selected = document.querySelector('.leaflet-pelias-selected')
-  var query = selected.innerText || selected.textContent
-  var coords = selected.coords
-
-  displayCommunityBoard(coords)
+  displayCommunityBoard(latlng)
 
   // Set url
-  var querystring = '?query=' + encodeURIComponent(query)
-    + '&lat=' + encodeURIComponent(coords[1])
-    + '&lng=' + encodeURIComponent(coords[0])
+  var querystring = '?query=' + encodeURIComponent(label)
+    + '&lat=' + encodeURIComponent(latlng.lat)
+    + '&lng=' + encodeURIComponent(latlng.lng)
   window.history.pushState({
-    lat: coords[1],
-    lng: coords[0],
-    query: query
+    lat: latlng.lat,
+    lng: latlng.lng,
+    query: label
   }, null, querystring)
-}
+})
 
-// Do not show any popups at all
-// showMarker() is rewritten to do custom stuff
-geocoder.origShowMarker = geocoder.showMarker
-geocoder.showMarker = function (text, coords) {
-  this.removeMarkers()
-
-  var geo = [coords[1], coords[0]]
-  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {}
-
-  if (this.options.markers) {
-    this.marker = new L.marker(geo, markerOptions)
-    this._map.addLayer(this.marker)
-    this.markers.push(this.marker)
-  }
-}
-
-// Also hijack reset input to clear the view when we clear the
-// search input & marker
-geocoder.origResetInput = geocoder.resetInput
-geocoder.resetInput = function () {
-  this.origResetInput()
+// If geocoder is reset, also clear everything else
+geocoder.on('reset', function (e) {
   clearData()
   if (districtLayer) {
     map.removeLayer(districtLayer)
+  }
+})
+
+// Do not show any popups at all
+// This augments geocoder functionality by rewiring internal
+// showMarker() to do custom stuff. There is no guarantee that these
+// internal methods will continue to be supported as is forever!
+geocoder.origShowMarker = geocoder.showMarker
+geocoder.showMarker = function (text, latlng) {
+  this.removeMarkers()
+
+  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {}
+
+  if (this.options.markers) {
+    this.marker = new L.marker(latlng, markerOptions)
+    this._map.addLayer(this.marker)
+    this.markers.push(this.marker)
   }
 }
 
@@ -215,9 +205,9 @@ window.setTimeout(function () {
   if (queryparams.lat && queryparams.lng) {
     queryparams.lat = window.parseFloat(queryparams.lat)
     queryparams.lng = window.parseFloat(queryparams.lng)
-    var coords = [queryparams.lng, queryparams.lat]
-    geocoder.showMarker(null, coords)
-    displayCommunityBoard(coords)
+    var latlng = { lat: queryparams.lat, lng: queryparams.lng }
+    geocoder.showMarker(null, latlng)
+    displayCommunityBoard(latlng)
   }
 }, 0)
 
@@ -225,7 +215,7 @@ window.setTimeout(function () {
 // TODO: Cache & share references to elements.
 function fillOutData (data) {
   clearData()
-  console.log(data)
+
   var dataEl = document.getElementById('board-info')
   dataEl.style.display = 'block'
 
@@ -261,27 +251,19 @@ function showMessage (msg) {
   document.getElementById('intro').style.display = 'none'
 }
 
-function getDistrictGeo (coords) {
-  var feature = {
-    'type': 'Feature',
-    'geometry': {
-      'type': 'Point',
-      'coordinates': coords
-    }
-  }
-
+function getDistrictGeo (latlng) {
   // Clear previous district if any
   if (districtLayer) {
     map.removeLayer(districtLayer)
   }
 
   // Find and add district
-  var districtGeo = search.findDistricts(feature)
+  var districtGeo = search.findDistricts(latlng)
 
   // Exit now if there's no geo
   if (!districtGeo) {
     // zoom to the geo point anyway
-    map.setView([coords[1], coords[0]], 14, {
+    map.setView(latlng, 14, {
       animate: true
     })
     return null
@@ -303,8 +285,8 @@ function getDistrictGeo (coords) {
   return districtGeo
 }
 
-function displayCommunityBoard (coords) {
-  var districtGeo = getDistrictGeo(coords)
+function displayCommunityBoard (latlng) {
+  var districtGeo = getDistrictGeo(latlng)
 
   if (districtGeo && districtGeo.features.length > 0) {
     var id = districtGeo.features[0].properties.communityDistrict
