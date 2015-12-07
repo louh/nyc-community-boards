@@ -22,7 +22,7 @@
     "component-ajax": "0.0.2",
     "leaflet": "0.7.5",
     "leaflet-hash": "^0.2.1",
-    "pelias-leaflet-geocoder": "^1.2.0",
+    "leaflet-geocoder-mapzen": "^1.3.0",
     "turf-extent": "^1.0.4",
     "turf-inside": "^1.1.4"
   },

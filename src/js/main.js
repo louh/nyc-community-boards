@@ -3,7 +3,7 @@
 var L = require('leaflet')
 var Tangram = require('tangram') // via browserify-shim
 var LHash = require('leaflet-hash')
-var geocoder = require('pelias-leaflet-geocoder')
+var geocoder = require('leaflet-geocoder-mapzen')
 var ajax = require('component-ajax')
 var turf = {
   extent: require('turf-extent')
