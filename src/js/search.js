@@ -7,7 +7,7 @@ var turf = {
   inside: inside
 }
 
-var DISTRICTS_URL = 'data/districts.geojson'
+var DISTRICTS_URL = 'site/data/districts.geojson'
 var DISTRICTS
 
 // Load

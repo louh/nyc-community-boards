@@ -18,11 +18,11 @@ var SCRAPE_API = [
 ]
 
 // data stored locally
-var MANHATTAN_DATA_FILE = 'data/manhattan.json'
-var BRONX_DATA_FILE = 'data/bronx.json'
-var BROOKLYN_DATA_FILE = 'data/brooklyn.json'
-var QUEENS_DATA_FILE = 'data/queens.json'
-var STATEN_ISLAND_DATA_FILE = 'data/staten-island.json'
+var MANHATTAN_DATA_FILE = 'site/data/manhattan.json'
+var BRONX_DATA_FILE = 'site/data/bronx.json'
+var BROOKLYN_DATA_FILE = 'site/data/brooklyn.json'
+var QUEENS_DATA_FILE = 'site/data/queens.json'
+var STATEN_ISLAND_DATA_FILE = 'site/data/staten-island.json'
 
 var DATA_FILES = [
   MANHATTAN_DATA_FILE,

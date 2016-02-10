@@ -9,6 +9,7 @@ var turf = {
   extent: require('turf-extent')
 }
 
+var feature = require('./feature')
 var search = require('./search')
 var districts = require('./districts')
 
@@ -39,13 +40,9 @@ map.addControl(L.control.zoom({
 
 var hash = new L.Hash(map)
 
-// Add Tangram scene layer
-// Modernizr only detects if browser is webgl-capable
-// but not if the browser has webgl disabled, so we have to manually check it
+// Add Tangram scene layer if webgl present.
 // For debug reasons you can also just pass webgl=false in the params
-if (Modernizr && Modernizr.webgl === true
-    && !!(document.createElement('canvas').getContext('webgl') || document.createElement('canvas').getContext('experimental-webgl'))
-    && !(queryparams.webgl)) {
+if (feature.webgl && !(queryparams.webgl)) {
   var layer = Tangram.leafletLayer({
     leaflet: L,
     scene: 'https://cdn.rawgit.com/tangrams/refill-style/ef1259dbbcd5f47ad3e8bed1a27c4fcab9676b3c/refill-style.yaml',
@@ -87,7 +84,7 @@ var districtLayer
 
 // layer.on('init', function () {
 //   ajax({
-//     url: 'data/boundaries.geojson',
+//     url: 'site/data/boundaries.geojson',
 //     success: function (response) {
 //       // What if we injected this into Tangram
 //       var content = JSON.stringify(response)
@@ -114,7 +111,7 @@ var districtLayer
 // })
 
 ajax({
-  url: 'data/boundaries.geojson',
+  url: 'site/data/boundaries.geojson',
   success: function (response) {
     // This is a string in local, but object on server
     var geo = (typeof response === 'string') ? JSON.parse(response) : response

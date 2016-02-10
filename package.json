@@ -21,8 +21,8 @@
   "dependencies": {
     "component-ajax": "0.0.2",
     "leaflet": "1.0.0-beta.2",
-    "leaflet-hash": "^0.2.1",
     "leaflet-geocoder-mapzen": "^1.4.1",
+    "leaflet-hash": "^0.2.1",
     "turf-extent": "^1.0.4",
     "turf-inside": "^1.1.4"
   },

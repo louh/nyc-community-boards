@@ -24,7 +24,7 @@ gulp.task('css', function () {
     .pipe(cssimport())
     .pipe(minifyCSS({ keepSpecialComments: 0 }))
     .pipe(rename('styles.css'))
-    .pipe(gulp.dest('./css'))
+    .pipe(gulp.dest('./site/css'))
     .pipe(livereload())
 })
 
@@ -45,7 +45,7 @@ gulp.task('js', function () {
       .pipe(uglify())
       .on('error', gutil.log)
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('./js'))
+    .pipe(gulp.dest('./site/js'))
 })
 
 gulp.task('watch', function () {
