@@ -1,24 +1,25 @@
 'use strict'
 
-var L = require('leaflet')
-var Tangram = require('tangram') // via browserify-shim
-var LHash = require('leaflet-hash')
-var geocoder = require('leaflet-geocoder-mapzen')
-var ajax = require('component-ajax')
-var turf = {
+let L = require('leaflet')
+let Tangram = require('tangram') // via browserify-shim
+let LHash = require('leaflet-hash')
+let geocoder = require('leaflet-geocoder-mapzen')
+let ajax = require('component-ajax')
+let turf = {
   extent: require('turf-extent')
 }
 
-var feature = require('./feature')
-var search = require('./search')
-var districts = require('./districts')
+let store = require('./store')
+let feature = require('./feature')
+let search = require('./search')
+let districts = require('./districts')
 
 // Query string parsing
-var queryparams = getQueryParams()
+let queryparams = getQueryParams()
 
 // Create a basic Leaflet map
-var accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
-var map = L.map('map', {
+let accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
+let map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
   // If iframed, disable scroll wheel
@@ -38,7 +39,7 @@ map.addControl(L.control.zoom({
   position: 'topright'
 }))
 
-var hash = new L.Hash(map)
+let hash = new L.Hash(map)
 
 // Add Tangram scene layer if webgl present.
 // For debug reasons you can also just pass webgl=false in the params

@@ -37,6 +37,7 @@ gulp.task('js', function () {
 
   // see package.json for transforms
   return browserify({ entries: ['src/js/main.js'] })
+    .transform('babelify', { presets: ['es2015', 'react'] })
     .bundle()
     .pipe(source('main.min.js'))
     .pipe(buffer())
