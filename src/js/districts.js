@@ -1,15 +1,15 @@
 'use strict'
 
-var ajax = require('component-ajax')
+import ajax from 'component-ajax'
 
 // get community board data after scraping the site.
-var MANHATTAN_SCRAPE_API = 'https://www.kimonolabs.com/api/7d69jowa?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-var BRONX_SCRAPE_API = 'https://www.kimonolabs.com/api/aaacwz8s?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-var BROOKLYN_SCRAPE_API = 'https://www.kimonolabs.com/api/897hsqhs?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-var QUEENS_SCRAPE_API = 'https://www.kimonolabs.com/api/95v22a6a?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-var STATEN_ISLAND_SCRAPE_API = 'https://www.kimonolabs.com/api/8fzz99xg?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
+const MANHATTAN_SCRAPE_API = 'https://www.kimonolabs.com/api/7d69jowa?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
+const BRONX_SCRAPE_API = 'https://www.kimonolabs.com/api/aaacwz8s?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
+const BROOKLYN_SCRAPE_API = 'https://www.kimonolabs.com/api/897hsqhs?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
+const QUEENS_SCRAPE_API = 'https://www.kimonolabs.com/api/95v22a6a?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
+const STATEN_ISLAND_SCRAPE_API = 'https://www.kimonolabs.com/api/8fzz99xg?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
 
-var SCRAPE_API = [
+const SCRAPE_API = [
   MANHATTAN_SCRAPE_API,
   BRONX_SCRAPE_API,
   BROOKLYN_SCRAPE_API,
@@ -18,13 +18,13 @@ var SCRAPE_API = [
 ]
 
 // data stored locally
-var MANHATTAN_DATA_FILE = 'site/data/manhattan.json'
-var BRONX_DATA_FILE = 'site/data/bronx.json'
-var BROOKLYN_DATA_FILE = 'site/data/brooklyn.json'
-var QUEENS_DATA_FILE = 'site/data/queens.json'
-var STATEN_ISLAND_DATA_FILE = 'site/data/staten-island.json'
+const MANHATTAN_DATA_FILE = 'site/data/manhattan.json'
+const BRONX_DATA_FILE = 'site/data/bronx.json'
+const BROOKLYN_DATA_FILE = 'site/data/brooklyn.json'
+const QUEENS_DATA_FILE = 'site/data/queens.json'
+const STATEN_ISLAND_DATA_FILE = 'site/data/staten-island.json'
 
-var DATA_FILES = [
+const DATA_FILES = [
   MANHATTAN_DATA_FILE,
   BRONX_DATA_FILE,
   BROOKLYN_DATA_FILE,
@@ -41,13 +41,13 @@ var DATA_FILES = [
 // Just load everything right away
 // TODO: optimize later
 
-var data = []
-var loaded = 0
+let data = []
+let loaded = 0
 
-for (var i = 0; i < DATA_FILES.length; i++) {
+DATA_FILES.forEach((file) => {
   ajax({
-    url: DATA_FILES[i],
-    success: function (response) {
+    url: file,
+    success: (response) => {
       // This is a string in local, but object on server
       var raw = (typeof response === 'string') ? JSON.parse(response) : response
       var boards = raw.results.community_boards
@@ -59,16 +59,16 @@ for (var i = 0; i < DATA_FILES.length; i++) {
       data = data.concat(edited)
       loaded += 1
     },
-    error: function (filename) {
+    error: (filename) => {
       console.log('error getting ' + filename)
-    }.bind(this, DATA_FILES[i])
+    }
   })
-}
+})
 
 // Given a community board ID in the format of YXX where Y is
 // between 1 - 5 and corresponds to a NYC borough, and XX is the
 // community board number, return a bunch of information about it
-function getById (id) {
+export function getDistrictById (id) {
   // If the data hasn't been loaded yet, send back an error
   if (loaded !== 5) {
     return {
@@ -146,8 +146,4 @@ function getScrapedData (boroughId, boardNumber) {
     }
   }
   return null
-}
-
-module.exports = {
-  getById: getById
 }

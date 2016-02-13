@@ -1,14 +1,14 @@
 'use strict'
 
-var inside = require('turf-inside')
-var ajax = require('component-ajax')
+import ajax from 'component-ajax'
+import inside from 'turf-inside'
 
-var turf = {
-  inside: inside
+const turf = {
+  inside
 }
 
-var DISTRICTS_URL = 'site/data/districts.geojson'
-var DISTRICTS
+const DISTRICTS_URL = 'site/data/districts.geojson'
+let DISTRICTS
 
 // Load
 ajax({
@@ -23,7 +23,7 @@ ajax({
 })
 
 // Given a lat-lng location, find the district it's inside
-function findDistricts (latlng) {
+export function findDistricts (latlng) {
   var results = []
   var foundNum
   var origId
@@ -66,8 +66,4 @@ function findDistricts (latlng) {
   } else {
     return null
   }
-}
-
-module.exports = {
-  findDistricts: findDistricts
 }

@@ -1,6 +1,6 @@
 'use strict'
 
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
 
 const LATLNG_PRECISION = 5
 const INITIAL_MAP_CENTER = {
@@ -9,56 +9,56 @@ const INITIAL_MAP_CENTER = {
 }
 const INITIAL_MAP_ZOOM = 12
 
-const defaultState = {
-  source: 'default',
+const defaultMapState = {
+  leaflet: false,
   lng: INITIAL_MAP_CENTER.lng,
   lat: INITIAL_MAP_CENTER.lat,
-  zoom: INITIAL_MAP_ZOOM,
-  query: null
+  zoom: INITIAL_MAP_ZOOM
 }
 
-const reducer = (state = defaultState, action) => {
+const mapView = (state = defaultMapState, action) => {
   switch (action.type) {
     case 'SET_MAP_CENTER':
-      return {
-        source: action.source,
+      return Object.assign({}, state, {
+        leaflet: action.leaflet,
         lng: coerceToFixed(action.lng),
-        lat: coerceToFixed(action.lat),
-        zoom: state.zoom,
-        query: state.query
-      }
+        lat: coerceToFixed(action.lat)
+      })
     case 'SET_MAP_ZOOM':
-      return {
-        source: action.source,
-        lng: state.lng,
-        lat: state.lat,
-        zoom: action.zoom,
-        query: state.query
-      }
+      return Object.assign({}, state, {
+        leaflet: action.leaflet,
+        zoom: action.zoom
+      })
     case 'SET_MAP_VIEW':
-      return {
-        source: action.source,
+      return Object.assign({}, state, {
+        leaflet: action.leaflet,
         lng: coerceToFixed(action.lng),
         lat: coerceToFixed(action.lat),
-        zoom: action.zoom,
-        query: state.query
-      }
-    case 'SET_SEARCH_QUERY':
-      return {
-        source: action.source,
-        lng: state.lng,
-        lat: state.lat,
-        zoom: state.zoom,
-        query: action.query
-      }
+        zoom: action.zoom
+      })
     default:
       return state
   }
 }
 
+const search = (state = null, action) => {
+  switch (action.type) {
+    case 'SET_SEARCH_QUERY':
+      return action.query
+    case 'CLEAR_QUERY':
+      return null
+    default:
+      return state
+  }
+}
+
+const reducer = combineReducers({
+  search,
+  mapView
+})
+
 const coerceToFixed = (value) => {
   return Number(value).toFixed(LATLNG_PRECISION)
 }
 
-const store = createStore(reducer)
-export default store
+export const store = createStore(reducer)

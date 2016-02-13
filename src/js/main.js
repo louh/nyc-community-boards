@@ -1,24 +1,26 @@
 'use strict'
 
-let L = require('leaflet')
-let Tangram = require('tangram') // via browserify-shim
-let LHash = require('leaflet-hash')
-let geocoder = require('leaflet-geocoder-mapzen')
-let ajax = require('component-ajax')
-let turf = {
-  extent: require('turf-extent')
+import L from 'leaflet'
+import Tangram from 'tangram' // via browserify-shim
+import 'leaflet-hash'
+import 'leaflet-geocoder-mapzen'
+
+import ajax from 'component-ajax'
+import extent from 'turf-extent'
+
+const turf = {
+  extent
 }
 
-let store = require('./store')
-let feature = require('./feature')
-let search = require('./search')
-let districts = require('./districts')
+import { store } from './store'
+import { feature } from './feature'
+import { findDistricts } from './search'
+import { getDistrictById } from './districts'
 
 // Query string parsing
 let queryparams = getQueryParams()
 
 // Create a basic Leaflet map
-let accessToken = 'pk.eyJ1IjoibG91IiwiYSI6IkJDYlg3REEifQ.9BLp9eUdT11kUy1jgujSsQ'
 let map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
@@ -46,7 +48,7 @@ let hash = new L.Hash(map)
 if (feature.webgl && !(queryparams.webgl)) {
   var layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'https://cdn.rawgit.com/tangrams/refill-style/ef1259dbbcd5f47ad3e8bed1a27c4fcab9676b3c/refill-style.yaml',
+    scene: 'https://cdn.rawgit.com/tangrams/refill-style/51a4ccb690be64d8625e2f47ec6519bd368cc2f2/refill-style.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 
@@ -143,6 +145,16 @@ var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   attribution: ''
 }).addTo(map);
 
+geocoder.focus = function () {
+  // If not expanded, expand this first
+  if (!L.DomUtil.hasClass(this._container, 'leaflet-pelias-expanded')) {
+    this.expand();
+  }
+  this._input.focus();
+}
+
+geocoder.focus();
+
 // debug
 window.geocoder = geocoder
 
@@ -150,6 +162,12 @@ window.geocoder = geocoder
 geocoder.on('select', function (e) {
   var label = e.feature.properties.label
   var latlng = e.latlng
+
+  store.dispatch({
+    type: 'SET_SEARCH_QUERY',
+    query: label
+  })
+  console.log(store.getState())
 
   displayCommunityBoard(latlng)
 
@@ -256,7 +274,7 @@ function getDistrictGeo (latlng) {
   }
 
   // Find and add district
-  var districtGeo = search.findDistricts(latlng)
+  var districtGeo = findDistricts(latlng)
 
   // Exit now if there's no geo
   if (!districtGeo) {
@@ -288,7 +306,7 @@ function displayCommunityBoard (latlng) {
 
   if (districtGeo && districtGeo.features.length > 0) {
     var id = districtGeo.features[0].properties.communityDistrict
-    var data = districts.getById(id)
+    var data = getDistrictById(id)
     if (data.error === true) {
       showMessage(data.message)
     } else {
