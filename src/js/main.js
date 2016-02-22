@@ -48,7 +48,7 @@ let hash = new L.Hash(map)
 if (feature.webgl && !(queryparams.webgl)) {
   var layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'https://cdn.rawgit.com/tangrams/refill-style/51a4ccb690be64d8625e2f47ec6519bd368cc2f2/refill-style.yaml',
+    scene: 'https://cdn.rawgit.com/tangrams/refill-style/6785c8c8d87edfde9e9b2e63b7a9807882b20076/refill-style.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 
