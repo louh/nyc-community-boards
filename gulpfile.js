@@ -30,10 +30,14 @@ gulp.task('css', function () {
 
 gulp.task('js', function () {
   var browserify = require('browserify')
+  var envify = require('loose-envify')
   var source = require('vinyl-source-stream')
   var buffer = require('vinyl-buffer')
   var uglify = require('gulp-uglify')
   var sourcemaps = require('gulp-sourcemaps')
+
+  // Set NODE_ENV for Redux and loose-envify
+  process.env.NODE_ENV = 'production'
 
   // see package.json for transforms
   return browserify({ entries: ['src/js/main.js'] })

@@ -5,7 +5,7 @@ import Tangram from 'tangram' // via browserify-shim
 import 'leaflet-hash'
 import 'leaflet-geocoder-mapzen'
 
-import ajax from 'component-ajax'
+import 'whatwg-fetch' // Polyfills window.fetch
 import extent from 'turf-extent'
 
 const turf = {
@@ -83,49 +83,23 @@ var districtStyle = {
 var boundaryLayer
 var districtLayer
 
-// var createObjectURL = (window.URL && window.URL.createObjectURL) || (window.webkitURL && window.webkitURL.createObjectURL)
+window.fetch('site/data/boundaries.geojson')
+  .then(function (response) {
+    if (response.status !== 200) {
+      console.log('error getting boundary geojson. status code: ' + response.status)
+      return
+    }
 
-// layer.on('init', function () {
-//   ajax({
-//     url: 'site/data/boundaries.geojson',
-//     success: function (response) {
-//       // What if we injected this into Tangram
-//       var content = JSON.stringify(response)
-//       layer.scene.config.sources['city'] = {
-//         url: createObjectURL(new Blob([content]))
-//       }
-//       var layerStyle = {
-//         data: { source: 'city' },
-//         draw: {
-//           polygons: {
-//             order: 10,
-//             color: 'red',
-//             width: '10px'
-//           }
-//         }
-//       }
-//       layer.scene.config.layers['city'] = layerStyle
-//       layer.scene.rebuild()
-//     },
-//     error: function () {
-//       console.log('error getting boundary geojson')
-//     }
-//   })
-// })
-
-ajax({
-  url: 'site/data/boundaries.geojson',
-  success: function (response) {
-    // This is a string in local, but object on server
-    var geo = (typeof response === 'string') ? JSON.parse(response) : response
-    boundaryLayer = L.geoJson(geo, {
+    return response.json()
+  })
+  .then(function (geojson) {
+    boundaryLayer = L.geoJson(geojson, {
       style: style
     }).addTo(map)
-  },
-  error: function () {
-    console.log('error getting boundary geojson')
-  }
-})
+  })
+  .catch(function (error) {
+    console.log('error getting boundary geojson: ' + error)
+  })
 
 // Add Pelias geocoding plugin
 var geocoder = new L.Control.Geocoder('search-pRNNjzA', {

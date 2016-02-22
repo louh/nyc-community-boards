@@ -1,7 +1,5 @@
 'use strict'
 
-import ajax from 'component-ajax'
-
 // get community board data after scraping the site.
 const MANHATTAN_SCRAPE_API = 'https://www.kimonolabs.com/api/7d69jowa?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
 const BRONX_SCRAPE_API = 'https://www.kimonolabs.com/api/aaacwz8s?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
@@ -45,24 +43,29 @@ let data = []
 let loaded = 0
 
 DATA_FILES.forEach((file) => {
-  ajax({
-    url: file,
-    success: (response) => {
+  window.fetch(file)
+    .then(function (response) {
+      if (response.status !== 200) {
+        console.log('error getting boundary geojson. status code: ' + response.status)
+        return
+      }
+
+      return response.json()
+    })
+    .then(function (json) {
       // This is a string in local, but object on server
-      var raw = (typeof response === 'string') ? JSON.parse(response) : response
-      var boards = raw.results.community_boards
-      var boroughId = getBoroughId(raw.results.borough[0].label)
+      var boards = json.results.community_boards
+      var boroughId = getBoroughId(json.results.borough[0].label)
       var edited = boards.map(function (board) {
         board.boroughId = boroughId
         return board
       })
       data = data.concat(edited)
       loaded += 1
-    },
-    error: (filename) => {
-      console.log('error getting ' + filename)
-    }
-  })
+    })
+    .catch(function (error) {
+      console.log(`error getting ${file}: ${error}`)
+    })
 })
 
 // Given a community board ID in the format of YXX where Y is

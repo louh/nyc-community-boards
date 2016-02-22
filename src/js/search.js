@@ -1,6 +1,5 @@
 'use strict'
 
-import ajax from 'component-ajax'
 import inside from 'turf-inside'
 
 const turf = {
@@ -11,16 +10,21 @@ const DISTRICTS_URL = 'site/data/districts.geojson'
 let DISTRICTS
 
 // Load
-ajax({
-  url: DISTRICTS_URL,
-  success: function (response) {
-    // This is a string in local, but object on server
-    DISTRICTS = (typeof response === 'string') ? JSON.parse(response) : response
-  },
-  error: function () {
-    console.log('error getting districts geojson')
-  }
-})
+window.fetch(DISTRICTS_URL)
+  .then(function (response) {
+    if (response.status !== 200) {
+      console.log('error getting boundary geojson. status code: ' + response.status)
+      return
+    }
+
+    return response.json()
+  })
+  .then(function (json) {
+    DISTRICTS = json
+  })
+  .catch(function (error) {
+    console.log('error getting districts geojson: ' + error)
+  })
 
 // Given a lat-lng location, find the district it's inside
 export function findDistricts (latlng) {
