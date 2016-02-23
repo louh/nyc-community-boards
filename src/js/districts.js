@@ -53,10 +53,9 @@ DATA_FILES.forEach((file) => {
       return response.json()
     })
     .then(function (json) {
-      // This is a string in local, but object on server
-      var boards = json.results.community_boards
-      var boroughId = getBoroughId(json.results.borough[0].label)
-      var edited = boards.map(function (board) {
+      const boards = json.results.community_boards
+      const boroughId = getBoroughId(json.results.borough[0].label)
+      const edited = boards.map(function (board) {
         board.boroughId = boroughId
         return board
       })
@@ -80,9 +79,9 @@ export function getDistrictById (id) {
     }
   }
 
-  var borough = getBoroughName(id)
-  var boardNumber = normalizeBoardNumber(id)
-  var scraped = getScrapedData(getBoroughId(borough), boardNumber)
+  const borough = getBoroughName(id)
+  const boardNumber = normalizeBoardNumber(id)
+  const scraped = getScrapedData(getBoroughId(borough), boardNumber)
 
   // Return all the data
   if (scraped) {
@@ -104,14 +103,14 @@ export function getDistrictById (id) {
 // Given the community board ID in the format YXX (as above)
 // return a one- or two-digit integer (of type 'number')
 function normalizeBoardNumber (id) {
-  var boardId = id.toString().substr(1)
+  const boardId = id.toString().substr(1)
   return window.parseInt(boardId, 10)
 }
 
 function getBoroughName (id) {
-  var str = id.toString()
-  var boroughId = window.parseInt(str.charAt(0), 10)
-  var name
+  const str = id.toString()
+  const boroughId = window.parseInt(str.charAt(0), 10)
+  let name
   switch (boroughId) {
     case 1:
       name = 'Manhattan'
@@ -143,10 +142,9 @@ function getBoroughId (string) {
 }
 
 function getScrapedData (boroughId, boardNumber) {
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].boroughId === boroughId && data[i].index === boardNumber) {
-      return data[i]
-    }
-  }
-  return null
+  // Filter returns an array, but there should only be one match
+  // shift() converts the first item of the array into a standalone object
+  return data.filter((district) => {
+    return district.boroughId === boroughId && district.index === boardNumber
+  }).shift()
 }

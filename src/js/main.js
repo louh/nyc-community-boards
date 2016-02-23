@@ -46,7 +46,7 @@ let hash = new L.Hash(map)
 // Add Tangram scene layer if webgl present.
 // For debug reasons you can also just pass webgl=false in the params
 if (feature.webgl && !(queryparams.webgl)) {
-  var layer = Tangram.leafletLayer({
+  const layer = Tangram.leafletLayer({
     leaflet: L,
     scene: 'https://cdn.rawgit.com/tangrams/refill-style/6785c8c8d87edfde9e9b2e63b7a9807882b20076/refill-style.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
@@ -56,32 +56,34 @@ if (feature.webgl && !(queryparams.webgl)) {
   window.layer = layer
 } else {
   // No WebGL fallback
-  var tileUrl = '//tile.stamen.com/toner/{z}/{x}/{y}.png'
+  let tileUrl = '//tile.stamen.com/toner/{z}/{x}/{y}.png'
+
   // Retina tiles
   if (window.devicePixelRatio >= 2) {
     tileUrl = '//tile.stamen.com/toner/{z}/{x}/{y}@2x.png'
   }
+
   L.tileLayer(tileUrl, {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.',
   }).addTo(map)
 }
 
-var style = {
+const style = {
   color: '#bbb',
   fillColor: 'transparent',
   weight: 4,
   opacity: 0.5
 }
 
-var districtStyle = {
+const districtStyle = {
   color: '#ff4444',
   fillColor: 'transparent',
   weight: 4,
   opacity: 0.7
 }
 
-var boundaryLayer
-var districtLayer
+let boundaryLayer
+let districtLayer
 
 window.fetch('site/data/boundaries.geojson')
   .then(function (response) {
@@ -102,7 +104,7 @@ window.fetch('site/data/boundaries.geojson')
   })
 
 // Add Pelias geocoding plugin
-var geocoder = new L.Control.Geocoder('search-pRNNjzA', {
+const geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   markers: {
     icon: L.divIcon({ className: 'point-marker' }),
     clickable: false,
@@ -141,7 +143,6 @@ geocoder.on('select', function (e) {
     type: 'SET_SEARCH_QUERY',
     query: label
   })
-  console.log(store.getState())
 
   displayCommunityBoard(latlng)
 
@@ -159,6 +160,7 @@ geocoder.on('select', function (e) {
 // If geocoder is reset, also clear everything else
 geocoder.on('reset', function (e) {
   clearData()
+  clearUrl()
   if (districtLayer) {
     map.removeLayer(districtLayer)
   }
@@ -172,7 +174,7 @@ geocoder.origShowMarker = geocoder.showMarker
 geocoder.showMarker = function (text, latlng) {
   this.removeMarkers()
 
-  var markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {}
+  const markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {}
 
   if (this.options.markers) {
     this.marker = new L.marker(latlng, markerOptions)
@@ -195,7 +197,7 @@ window.setTimeout(function () {
   if (queryparams.lat && queryparams.lng) {
     queryparams.lat = window.parseFloat(queryparams.lat)
     queryparams.lng = window.parseFloat(queryparams.lng)
-    var latlng = { lat: queryparams.lat, lng: queryparams.lng }
+    const latlng = { lat: queryparams.lat, lng: queryparams.lng }
     geocoder.showMarker(null, latlng)
     displayCommunityBoard(latlng)
   }
@@ -206,7 +208,7 @@ window.setTimeout(function () {
 function fillOutData (data) {
   clearData()
 
-  var dataEl = document.getElementById('board-info')
+  const dataEl = document.getElementById('board-info')
   dataEl.style.display = 'block'
 
   dataEl.querySelector('.community-board-label').textContent = data.label
@@ -222,9 +224,9 @@ function fillOutData (data) {
 
 // Clear the community board view
 function clearData () {
-  var dataEl = document.getElementById('board-info')
-  var contents = dataEl.querySelectorAll('.data')
-  for (var i = 0, j = contents.length; i < j; i++) {
+  const dataEl = document.getElementById('board-info')
+  const contents = dataEl.querySelectorAll('.data')
+  for (let i = 0, j = contents.length; i < j; i++) {
     contents[i].textContent = ''
   }
   dataEl.querySelector('.data.website').href = ''
@@ -234,6 +236,11 @@ function clearData () {
   document.getElementById('intro').style.display = 'block'
 }
 
+function clearUrl () {
+  const querystring = ''
+  window.history.pushState({}, null, window.location.origin + window.location.pathname + window.location.hash)
+}
+
 function showMessage (msg) {
   clearData()
   document.getElementById('message').textContent = msg
@@ -241,17 +248,14 @@ function showMessage (msg) {
   document.getElementById('intro').style.display = 'none'
 }
 
-function getDistrictGeo (latlng) {
+function addDistrictGeoToMap (geojson) {
   // Clear previous district if any
   if (districtLayer) {
     map.removeLayer(districtLayer)
   }
 
-  // Find and add district
-  var districtGeo = findDistricts(latlng)
-
   // Exit now if there's no geo
-  if (!districtGeo) {
+  if (!geojson) {
     // zoom to the geo point anyway
     map.setView(latlng, 14, {
       animate: true
@@ -259,48 +263,50 @@ function getDistrictGeo (latlng) {
     return null
   }
 
-  districtLayer = L.geoJson(districtGeo, {
+  districtLayer = L.geoJson(geojson, {
     style: districtStyle
   }).addTo(map)
 
   // Zoom to bounds
   // WSEN order (west, south, east, north)
-  var bbox = turf.extent(districtGeo)
+  const bbox = turf.extent(geojson)
   // southwest latlng, northeast latlng
   map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
     paddingTopLeft: [250, 0],
     animate: true
   })
-
-  return districtGeo
 }
 
 function displayCommunityBoard (latlng) {
-  var districtGeo = getDistrictGeo(latlng)
+  // Find and add district
+  const districtGeo = findDistricts(latlng)
+  districtGeo.then((geo) => {
+    addDistrictGeoToMap(geo)
 
-  if (districtGeo && districtGeo.features.length > 0) {
-    var id = districtGeo.features[0].properties.communityDistrict
-    var data = getDistrictById(id)
-    if (data.error === true) {
-      showMessage(data.message)
+    if (geo && geo.features.length > 0) {
+      const id = geo.features[0].properties.communityDistrict
+      const data = getDistrictById(id)
+      if (data.error === true) {
+        showMessage(data.message)
+      } else {
+        fillOutData(data)
+      }
     } else {
-      fillOutData(data)
+      showMessage('This site only has results for New York City.')
     }
-  } else {
-    showMessage('This site only has results for New York City.')
-  }
+  })
 }
 
 // Returns empty object if no params
 function getQueryParams () {
-  var string = window.location.search.substr(1)
-  var units = string.split('&')
-  var params = {}
+  const string = window.location.search.substr(1)
+  const units = string.split('&')
+  const params = {}
 
-  for (var i = 0; i < units.length; i++) {
-    var pair = units[i].split('=')
+  units.forEach((unit) => {
+    const pair = unit.split('=')
     params[pair[0]] = window.decodeURIComponent(pair[1])
-  }
+  })
 
   return params
 }
