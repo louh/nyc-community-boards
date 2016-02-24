@@ -17,6 +17,8 @@ import { feature } from './feature'
 import { findDistricts } from './search'
 import { getDistrictById } from './districts'
 
+const BOUNDARY_GEOJSON = 'site/data/boundaries.geojson'
+
 // Query string parsing
 let queryparams = getQueryParams()
 
@@ -52,6 +54,26 @@ if (feature.webgl && !(queryparams.webgl)) {
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 
+  layer.scene.subscribe({
+    load: function (msg) {
+      const url = window.location.origin + window.location.pathname + BOUNDARY_GEOJSON
+      const layerStyle = {
+        data: { source: 'city-boundary' },
+        draw: {
+          polygons: {
+            order: 10,
+            color: '#bbb',
+            width: '10px'
+          }
+        }
+      }
+
+      layer.scene.setDataSource('city-boundary', { type: 'GeoJSON', url: url })
+      layer.scene.config.layers['city-boundary'] = layerStyle
+      layer.scene.rebuild()
+    }
+  })
+
   // Debug
   window.layer = layer
 } else {
@@ -66,13 +88,32 @@ if (feature.webgl && !(queryparams.webgl)) {
   L.tileLayer(tileUrl, {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.',
   }).addTo(map)
-}
 
-const style = {
-  color: '#bbb',
-  fillColor: 'transparent',
-  weight: 4,
-  opacity: 0.5
+  // GeoJSON boundary
+  const style = {
+    color: '#bbb',
+    fillColor: 'transparent',
+    weight: 4,
+    opacity: 0.5
+  }
+
+  window.fetch(BOUNDARY_GEOJSON)
+    .then(function (response) {
+      if (response.status !== 200) {
+        console.log('error getting boundary geojson. status code: ' + response.status)
+        return
+      }
+
+      return response.json()
+    })
+    .then(function (geojson) {
+      L.geoJson(geojson, {
+        style: style
+      }).addTo(map)
+    })
+    .catch(function (error) {
+      console.log('error getting boundary geojson: ' + error)
+    })
 }
 
 const districtStyle = {
@@ -82,26 +123,7 @@ const districtStyle = {
   opacity: 0.7
 }
 
-let boundaryLayer
 let districtLayer
-
-window.fetch('site/data/boundaries.geojson')
-  .then(function (response) {
-    if (response.status !== 200) {
-      console.log('error getting boundary geojson. status code: ' + response.status)
-      return
-    }
-
-    return response.json()
-  })
-  .then(function (geojson) {
-    boundaryLayer = L.geoJson(geojson, {
-      style: style
-    }).addTo(map)
-  })
-  .catch(function (error) {
-    console.log('error getting boundary geojson: ' + error)
-  })
 
 // Add Pelias geocoding plugin
 const geocoder = new L.Control.Geocoder('search-pRNNjzA', {
