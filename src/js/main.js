@@ -56,21 +56,32 @@ if (feature.webgl && !(queryparams.webgl)) {
 
   layer.scene.subscribe({
     load: function (msg) {
-      const url = window.location.origin + window.location.pathname + BOUNDARY_GEOJSON
+      // Tangram requires a source URL to be fully qualified, so rebuild the
+      // relative reference to the URL using the current location path
+      const url = window.location.origin + window.location.pathname + 'site/data/boundaries.geojson'
       const layerStyle = {
         data: { source: 'city-boundary' },
         draw: {
-          polygons: {
-            order: 10,
+          lines: {
             color: '#bbb',
-            width: '10px'
+            width: '4px',
+            order: 40 // This should be under labels
           }
         }
       }
 
-      layer.scene.setDataSource('city-boundary', { type: 'GeoJSON', url: url })
-      layer.scene.config.layers['city-boundary'] = layerStyle
-      layer.scene.rebuild()
+      // Don't do this here
+      // layer.scene.setDataSource('city-boundary', { type: 'GeoJSON', url: url })
+
+      // Instead, we can modify the config directly, just before it renders
+      msg.config.sources['city-boundary'] = {
+        type: 'GeoJSON',
+        url: url
+      }
+      msg.config.layers['city-boundary'] = layerStyle
+
+      // layer.scene.rebuild()
+      // No need to return msg; this is passed in by reference
     }
   })
 
