@@ -44,6 +44,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
+    "loose-envify": "^1.1.0",
     "standard": "^6.0.4",
     "surge": "^0.17.3",
     "vinyl-buffer": "^1.0.0",
