@@ -58,7 +58,7 @@ if (feature.webgl && !(queryparams.webgl)) {
     load: function (msg) {
       // Tangram requires a source URL to be fully qualified, so rebuild the
       // relative reference to the URL using the current location path
-      const url = window.location.origin + window.location.pathname + 'site/data/boundaries.geojson'
+      const url = window.location.origin + window.location.pathname + BOUNDARY_GEOJSON
       const layerStyle = {
         data: { source: 'city-boundary' },
         draw: {
