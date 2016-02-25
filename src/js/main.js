@@ -289,15 +289,6 @@ function addDistrictGeoToMap (geojson) {
     map.removeLayer(districtLayer)
   }
 
-  // Exit now if there's no geo
-  if (!geojson) {
-    // zoom to the geo point anyway
-    map.setView(latlng, 14, {
-      animate: true
-    })
-    return null
-  }
-
   districtLayer = L.geoJson(geojson, {
     style: districtStyle
   }).addTo(map)
@@ -317,11 +308,12 @@ function displayCommunityBoard (latlng) {
   // Find and add district
   const districtGeo = findDistricts(latlng)
   districtGeo.then((geo) => {
-    addDistrictGeoToMap(geo)
-
     if (geo && geo.features.length > 0) {
       const id = geo.features[0].properties.communityDistrict
       const district = getDistrictById(id)
+
+      addDistrictGeoToMap(geo)
+
       district.then(function (data) {
         if (data.error === true) {
           showMessage(data.message)
@@ -331,6 +323,11 @@ function displayCommunityBoard (latlng) {
       })
     } else {
       showMessage('This site only has results for New York City.')
+
+      // zoom to the geo point anyway
+      map.setView(latlng, 14, {
+        animate: true
+      })
     }
   })
 }
