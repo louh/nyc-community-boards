@@ -43,7 +43,7 @@ let data = []
 let loaded = 0
 
 DATA_FILES.forEach((file) => {
-  window.fetch(file)
+  let response = window.fetch(file)
     .then(function (response) {
       if (response.status !== 200) {
         console.log('error getting boundary geojson. status code: ' + response.status)
@@ -52,52 +52,60 @@ DATA_FILES.forEach((file) => {
 
       return response.json()
     })
-    .then(function (json) {
-      const boards = json.results.community_boards
-      const boroughId = getBoroughId(json.results.borough[0].label)
-      const edited = boards.map(function (board) {
-        board.boroughId = boroughId
-        return board
-      })
-      data = data.concat(edited)
-      loaded += 1
-    })
     .catch(function (error) {
       console.log(`error getting ${file}: ${error}`)
     })
+
+  data.push(response)
 })
+
+let districts = Promise.all(data)
+  .then(function (values) {
+    let districts = values.reduce(function (previous, current, index, all) {
+      let boards = current.results.community_boards
+      let boroughId = getBoroughId(current.results.borough[0].label)
+      let edited = boards.map(function (board) {
+        board.boroughId = boroughId
+        return board
+      })
+      let added = previous.concat(edited)
+      return added
+    }, [])
+    return districts
+  })
 
 // Given a community board ID in the format of YXX where Y is
 // between 1 - 5 and corresponds to a NYC borough, and XX is the
 // community board number, return a bunch of information about it
 export function getDistrictById (id) {
-  // If the data hasn't been loaded yet, send back an error
-  if (loaded !== 5) {
+  return districts.then(function (data) {
+    const borough = getBoroughName(id)
+    const boardNumber = normalizeBoardNumber(id)
+    const scraped = getScrapedData(data, getBoroughId(borough), boardNumber)
+
+    // Return all the data
+    if (scraped) {
+      return {
+        id: id,
+        borough: borough,
+        boardNumber: boardNumber,
+        label: borough + ' Community Board ' + boardNumber.toString(),
+        data: scraped
+      }
+    } else {
+      return {
+        error: true,
+        message: 'There is no community board at that address.'
+      }
+    }
+  })
+  .catch(function (error) {
+    console.log(error)
     return {
       error: true,
       message: 'Error loading borough information, please try again later.'
     }
-  }
-
-  const borough = getBoroughName(id)
-  const boardNumber = normalizeBoardNumber(id)
-  const scraped = getScrapedData(getBoroughId(borough), boardNumber)
-
-  // Return all the data
-  if (scraped) {
-    return {
-      id: id,
-      borough: borough,
-      boardNumber: boardNumber,
-      label: borough + ' Community Board ' + boardNumber.toString(),
-      data: scraped
-    }
-  } else {
-    return {
-      error: true,
-      message: 'There is no community board at that address.'
-    }
-  }
+  })
 }
 
 // Given the community board ID in the format YXX (as above)
@@ -141,10 +149,10 @@ function getBoroughId (string) {
   else if (string.match('Staten')) return 5
 }
 
-function getScrapedData (boroughId, boardNumber) {
+function getScrapedData (districts, boroughId, boardNumber) {
   // Filter returns an array, but there should only be one match
   // shift() converts the first item of the array into a standalone object
-  return data.filter((district) => {
+  return districts.filter((district) => {
     return district.boroughId === boroughId && district.index === boardNumber
   }).shift()
 }

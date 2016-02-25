@@ -26,6 +26,8 @@ let queryparams = getQueryParams()
 let map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
+  // Allows fractional zoom on fitBounds() (future Leaflets)
+  zoomSnap: 0.25,
   // If iframed, disable scroll wheel
   scrollWheelZoom: (window.self === window.top) ? true : false,
   // If iframed & touchscreen, disable dragging & tap to prevent Leaflet
@@ -305,7 +307,8 @@ function addDistrictGeoToMap (geojson) {
   const bbox = turf.extent(geojson)
   // southwest latlng, northeast latlng
   map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
-    paddingTopLeft: [250, 0],
+    paddingTopLeft: [250, 10],
+    paddingBottomRight: [10, 10],
     animate: true
   })
 }
@@ -318,12 +321,14 @@ function displayCommunityBoard (latlng) {
 
     if (geo && geo.features.length > 0) {
       const id = geo.features[0].properties.communityDistrict
-      const data = getDistrictById(id)
-      if (data.error === true) {
-        showMessage(data.message)
-      } else {
-        fillOutData(data)
-      }
+      const district = getDistrictById(id)
+      district.then(function (data) {
+        if (data.error === true) {
+          showMessage(data.message)
+        } else {
+          fillOutData(data)
+        }
+      })
     } else {
       showMessage('This site only has results for New York City.')
     }
