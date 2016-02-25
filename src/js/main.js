@@ -250,9 +250,27 @@ function fillOutData (data) {
   dataEl.querySelector('.data.neighborhoods').textContent = data.data.neighborhoods
   dataEl.querySelector('.data.address').innerHTML = data.data.address.replace(/\n/g, '<br>')
   dataEl.querySelector('.data.phone').textContent = data.data.phone
-  dataEl.querySelector('.data.email').textContent = data.data.email
-  dataEl.querySelector('.data.website').textContent = data.data.website.href
-  dataEl.querySelector('.data.website').href = data.data.website.href
+
+  let email = data.data.email
+  if (email) {
+    dataEl.querySelector('.data.email').textContent = data.data.email
+  } else {
+    dataEl.querySelector('.data.email').textContent = 'None provided'
+  }
+
+  // HACK: some scraped website URLs have this prefix: http://www.nyc.gov/cgi-bin/exit.pl?url=
+  // and that needs to go away
+  const goAway = 'http://www.nyc.gov/cgi-bin/exit.pl?url='
+  const websiteEl = document.querySelector('.data.website')
+  if (data.data.website.href) {
+    let href = data.data.website.href.replace(goAway, '')
+    let anchorEl = document.createElement('a')
+    anchorEl.href = href
+    anchorEl.appendChild(document.createTextNode(href))
+    websiteEl.appendChild(anchorEl)
+  } else {
+    websiteEl.appendChild(document.createTextNode('None provided'))
+  }
 
   document.getElementById('intro').style.display = 'none'
 }
@@ -264,8 +282,8 @@ function clearData () {
   for (let i = 0, j = contents.length; i < j; i++) {
     contents[i].textContent = ''
   }
-  dataEl.querySelector('.data.website').href = ''
   dataEl.style.display = 'none'
+  document.querySelector('.data.website').innerHTML = ''
   document.getElementById('message').textContent = ''
   document.getElementById('message').style.display = 'none'
   document.getElementById('intro').style.display = 'block'

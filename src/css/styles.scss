@@ -85,7 +85,6 @@ h3 {
   margin-bottom: 0;
 }
 
-.website-container {
-  overflow: hidden;
-  text-overflow: ellipsis;
+.data.website a {
+  word-wrap: break-word;
 }
