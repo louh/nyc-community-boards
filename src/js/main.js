@@ -67,7 +67,8 @@ if (feature.webgl && !(queryparams.webgl)) {
           lines: {
             color: '#bbb',
             width: '4px',
-            order: 40 // This should be under labels
+            order: 40, // This should be under labels
+            join: 'round'
           }
         }
       }
