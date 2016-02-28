@@ -105,6 +105,12 @@ h1 {
     border-top: 1px solid #aaa;
     background-color: #f6f5f1;
   }
+
+  // Hide, not enough room to show it
+  // Ideally this happens only when the keypad is open
+  @media #{$mobile-portrait} and (orientation: landscape) {
+    display: none;
+  }
 }
 
 .instructions {
