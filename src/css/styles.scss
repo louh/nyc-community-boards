@@ -14,9 +14,15 @@ $desktop: '(min-width: 737px)';
 @import 'map'; // Map page base
 @import 'leaflet-overrides';
 
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: 'proxima-nova', sans-serif;
-  overflow: hidden;
 }
 
 .box {
