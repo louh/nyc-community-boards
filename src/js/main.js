@@ -23,6 +23,7 @@ const BOUNDARY_GEOJSON = 'site/data/boundaries.geojson'
 let queryparams = getQueryParams()
 
 // Create a basic Leaflet map
+let initialZoom = (window.innerWidth < 700) ? 10 : 11
 let map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
@@ -34,7 +35,7 @@ let map = L.map('map', {
   // from hijacking the page scroll.
   dragging: (window.self !== window.top && L.Browser.touch) ? false : true,
   tap: (window.self !== window.top && L.Browser.touch) ? false : true,
-}).setView([40.7114, -73.9716], 11)
+}).setView([40.7114, -73.9716], initialZoom)
 
 // Set this manually for bundled Leaflet
 L.Icon.Default.imagePath = 'images'
@@ -140,7 +141,7 @@ const districtStyle = {
 let districtLayer
 
 // Add Pelias geocoding plugin
-const geocoder = new L.Control.Geocoder('search-pRNNjzA', {
+let geocoderOptions =  {
   markers: {
     icon: L.divIcon({ className: 'point-marker' }),
     clickable: false,
@@ -155,17 +156,14 @@ const geocoder = new L.Control.Geocoder('search-pRNNjzA', {
   autocomplete: false,
   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
   attribution: ''
-}).addTo(map);
-
-geocoder.focus = function () {
-  // If not expanded, expand this first
-  if (!L.DomUtil.hasClass(this._container, 'leaflet-pelias-expanded')) {
-    this.expand();
-  }
-  this._input.focus();
 }
-
-geocoder.focus();
+// Instructions are hidden on mobile screens to save room, so put it in the placeholder
+if (window.matchMedia('only screen and (max-width: 480px) and (orientation: portrait)')) {
+  geocoderOptions.placeholder = 'Search by your address'
+}
+const geocoder = new L.Control.Geocoder('search-pRNNjzA', geocoderOptions).addTo(map)
+document.getElementById('geocoder').appendChild(geocoder.getContainer())
+geocoder.focus()
 
 // debug
 window.geocoder = geocoder
@@ -315,12 +313,24 @@ function addDistrictGeoToMap (geojson) {
   // Zoom to bounds
   // WSEN order (west, south, east, north)
   const bbox = turf.extent(geojson)
-  // southwest latlng, northeast latlng
-  map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], {
+  let fitOptions = {
     paddingTopLeft: [250, 10],
     paddingBottomRight: [10, 10],
     animate: true
-  })
+  }
+  // For portrait mobile size screens that match the CSS breakpoint,
+  // no side padding, but use top and bottom padding
+  if (window.matchMedia('(max-width: 480px) and (orientation: portrait)').matches === true) {
+    fitOptions.paddingTopLeft = [0, 100]
+    fitOptions.paddingBottomRight = [0, 200]
+  }
+  // On landscape mobile size screens, use left side padding only
+  if (window.matchMedia('(max-width: 736px) and (orientation: landscape)').matches === true) {
+    fitOptions.paddingTopLeft  = [0, 0]
+    fitOptions.paddingBottomRight = [0, 0]
+  }
+  // southwest latlng, northeast latlng
+  map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], fitOptions)
 }
 
 function displayCommunityBoard (latlng) {

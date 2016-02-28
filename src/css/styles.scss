@@ -7,6 +7,10 @@ $text-color: #222;
 $left-offset: 16px;
 $box-padding: 16px;
 
+$mobile-portrait: '(max-width: 480px) and (orientation: portrait)';
+$mobile-landscape: '(max-width: 736px) and (orientation: landscape)';
+$desktop: '(min-width: 737px)';
+
 @import 'map'; // Map page base
 @import 'leaflet-overrides';
 
@@ -25,7 +29,7 @@ body {
   border-radius: 4px;
   box-sizing: border-box;
   padding: $box-padding;
-  z-index: 800;
+  z-index: 1000;
   background-color: #f6f5f1;
   color: $text-color;
   border: 1px solid #aaa;
@@ -33,6 +37,28 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   font-size: 14px;
+
+  @media #{$mobile-portrait}, #{$mobile-landscape} {
+    left: 0;
+    // Override borders
+    border-radius: 0;
+    border: 0;
+    // Slightly smaller box-shadow effect, but same color
+    box-shadow: rgba(191,191,191, 0.5) 0px 0px 0px 3px;
+  }
+
+  @media #{$mobile-portrait} {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #aaa;
+  }
+
+  @media #{$mobile-landscape} {
+    border-right: 1px solid #aaa;
+    height: 100%;
+    overflow-y: auto;
+  }
 }
 
 h1 {
@@ -45,17 +71,50 @@ h1 {
   color: $text-color;
 }
 
+#geocoder {
+  margin-bottom: 10px;
+  margin-left: -1px;
+  margin-top: -5px;
+
+  @media #{$mobile-landscape} {
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
+  @media #{$mobile-portrait} {
+    margin-bottom: 0;
+    margin-top: 5px;
+  }
+}
+
 .result-area {
-  margin-top: 50px;
   line-height: 1.4;
   border-top: 1px solid $ui-color;
   padding-top: 3px;
+
+  @media #{$mobile-portrait} {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    padding: 12px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 3px hsla(0, 0%, 75%, 0.5);
+    border-top: 1px solid #aaa;
+    background-color: #f6f5f1;
   }
+}
 
 .instructions {
   color: #888;
   font-style: italic;
   font-size: 12px;
+
+  @media #{$mobile-portrait}, #{$mobile-landscape} {
+    display: none;
+  }
 }
 
 #message {
@@ -63,15 +122,28 @@ h1 {
   font-weight: bold;
   color: #ff4444;
   margin-top: 10px;
+
+  @media #{$mobile-portrait} {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
 }
 
 #board-info {
   display: none;
+
+  @media #{$mobile-portrait} {
+    margin-bottom: 10px;
+  }
 }
 
 #intro {
   display: block;
   margin-top: 10px;
+
+  @media #{$mobile-portrait} {
+    margin-top: 0;
+  }
 }
 
 .community-board-label {

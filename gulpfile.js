@@ -22,7 +22,7 @@ gulp.task('css', function () {
     .pipe(sass())
     .pipe(autoprefix('last 2 versions'))
     .pipe(cssimport())
-    .pipe(cssnano())
+    .pipe(cssnano({ zindex: false }))
     .pipe(rename('styles.css'))
     .pipe(gulp.dest('./site/css'))
     .pipe(livereload())

@@ -4,10 +4,15 @@
 // Inline the leaflet-geocoder styles
 @import '../../node_modules/leaflet-geocoder-mapzen/dist/leaflet-geocoder-mapzen.css';
 
-/* Hide zoom controls on mobile */
-@media only screen and (max-width: 650px) {
-  .leaflet-touch .leaflet-control-zoom {
-    display: none;
+@media #{$mobile-portrait} {
+  // Reposition zoom
+  .leaflet-control-zoom {
+    top: 100px;
+  }
+
+  .leaflet-top.leaflet-left {
+    width: 100%; // allows input box to take up size of viewport
+    z-index: 1100; // ensures results box overlaps zoom controls
   }
 }
 
@@ -23,45 +28,80 @@
 }
 
 .leaflet-pelias-control {
-  position: absolute;
-  left: $left-offset + $box-padding - 10px;
-  top: 75px;
   width: 268px;
   box-shadow: none;
   border: none;
   border-bottom: 1px dotted #e1e1e1;
+  float: none;
 }
 
 .leaflet-pelias-input {
   font-family: 'proxima-nova', sans-serif;
 }
 
-.leaflet-top .leaflet-pelias-results {
+/* Prevent zoom-in on focus on iOS safari */
+.leaflet-touch.leaflet-safari .leaflet-pelias-input {
+  font-size: 16px;
+}
+
+.leaflet-pelias-results {
   top: 32px;
+
+  @media #{$mobile-portrait}, #{$mobile-landscape} {
+    top: 44px;
+  }
 }
 
 .leaflet-pelias-results {
   left: -1px;
-  max-height: 170px !important;
   overflow-y: auto;
   border: 1px solid #e0e0e0;
+
+  @media #{$desktop} {
+    max-height: 170px !important;
+  }
 }
 
 .leaflet-touch .leaflet-pelias-results.leaflet-bar {
   border: 1px solid #e0e0e0;
 }
 
+// Overrides for touch
 .leaflet-touch {
   .leaflet-pelias-control,
   .leaflet-pelias-control.leaflet-pelias-expanded {
     width: 268px;
-    line-height: 32px;
     height: 32px;
+    line-height: 32px;
   }
   .leaflet-pelias-control.leaflet-bar {
     border: 0;
   }
   .leaflet-pelias-results {
     box-shadow: none;
+  }
+}
+
+@media #{$mobile-portrait}, #{$mobile-landscape} {
+  .leaflet-pelias-control,
+  .leaflet-pelias-control.leaflet-pelias-expanded,
+  .leaflet-touch .leaflet-pelias-control,
+  .leaflet-touch .leaflet-pelias-control.leaflet-pelias-expanded {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+  }
+}
+
+@media #{$mobile-portrait} {
+  .leaflet-bottom.leaflet-right {
+    width: 100%
+  }
+
+  .leaflet-control-attribution {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+    background-color: white !important;
   }
 }
