@@ -7,8 +7,8 @@ $text-color: #222;
 $left-offset: 16px;
 $box-padding: 16px;
 
-$mobile-portrait: '(max-width: 480px) and (orientation: portrait)';
-$mobile-landscape: '(max-width: 736px) and (orientation: landscape)';
+$mobile-portrait: '(max-width: 480px)';
+$mobile-landscape: '(min-width: 481px) and (max-width: 736px) and (orientation: landscape)';
 $desktop: '(min-width: 737px)';
 
 @import 'map'; // Map page base
