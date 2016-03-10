@@ -1,6 +1,7 @@
 'use strict'
 
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import createLogger from 'redux-logger'
 
 const LATLNG_PRECISION = 5
 const INITIAL_MAP_CENTER = {
@@ -15,6 +16,8 @@ const defaultMapState = {
   lat: INITIAL_MAP_CENTER.lat,
   zoom: INITIAL_MAP_ZOOM
 }
+
+const logger = createLogger()
 
 const mapView = (state = defaultMapState, action) => {
   switch (action.type) {
@@ -61,4 +64,4 @@ const coerceToFixed = (value) => {
   return Number(value).toFixed(LATLNG_PRECISION)
 }
 
-export const store = createStore(reducer)
+export const store = createStore(reducer, applyMiddleware(logger))
