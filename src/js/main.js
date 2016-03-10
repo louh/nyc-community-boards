@@ -53,7 +53,7 @@ let hash = new L.Hash(map)
 if (feature.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'https://cdn.rawgit.com/tangrams/refill-style/2e454025afa5d21eda82ce55418f1c4db0064395/refill-style.yaml',
+    scene: 'https://mapzen.com/carto/refill-style/2.0/refill-style.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 
@@ -68,7 +68,7 @@ if (feature.webgl && !(queryparams.webgl)) {
           lines: {
             color: '#bbb',
             width: '4px',
-            order: 40, // This should be under labels
+            order: 400, // This should be under labels
             join: 'round'
           }
         }
