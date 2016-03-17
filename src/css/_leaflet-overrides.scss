@@ -23,6 +23,16 @@
   border-radius: 2px;
 }
 
+.leaflet-bar a.leaflet-control-zoom-in {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.leaflet-bar a.leaflet-control-zoom-out {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
 .leaflet-pelias-expanded {
   height: 32px;
 }
