@@ -1,11 +1,13 @@
 'use strict'
 
+import 'babel-polyfill'
+import 'whatwg-fetch' // Polyfills window.fetch
+
 import L from 'leaflet'
 import Tangram from 'tangram' // via browserify-shim
 import 'leaflet-hash'
 import 'leaflet-geocoder-mapzen'
 
-import 'whatwg-fetch' // Polyfills window.fetch
 import extent from 'turf-extent'
 
 const turf = {
