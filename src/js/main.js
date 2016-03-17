@@ -18,6 +18,7 @@ import { findDistricts } from './search'
 import { getDistrictById } from './districts'
 
 const BOUNDARY_GEOJSON = 'site/data/boundaries.geojson'
+const SEARCH_API_KEY = 'search-pRNNjzA'
 
 // Query string parsing
 let queryparams = getQueryParams()
@@ -45,6 +46,36 @@ L.Icon.Default.imagePath = 'images'
 map.addControl(L.control.zoom({
   position: 'topright'
 }))
+
+map.on('click', function (e) {
+  const reverse = `https://search.mapzen.com/v1/reverse?point.lat=${e.latlng.lat}&point.lon=${e.latlng.lng}&size=1&layers=address&api_key=${SEARCH_API_KEY}`
+
+  let latlng = e.latlng
+  let label = 'nope'
+
+  // Show marker on clicked location immediately
+  geocoder.showMarker(null, latlng)
+
+  // Reverse geocode and then display things based on it
+  window.fetch(reverse)
+    .then(function (response) {
+      if (response.status !== 200) {
+        throw new Error(`status code: ${response.status}`)
+        return
+      }
+
+      return response.json()
+    })
+    .then(function (response) {
+      const label = response.features[0].properties.label
+
+      geocoder._input.value = label
+      selectLocation(latlng, label)
+    })
+    .catch(function (error) {
+      console.log('error getting reverse geocode. ' + error)
+    })
+})
 
 let hash = new L.Hash(map)
 
@@ -115,7 +146,7 @@ if (feature.webgl && !(queryparams.webgl)) {
   window.fetch(BOUNDARY_GEOJSON)
     .then(function (response) {
       if (response.status !== 200) {
-        console.log('error getting boundary geojson. status code: ' + response.status)
+        throw new Error(`status code: ${response.status}`)
         return
       }
 
@@ -161,7 +192,7 @@ let geocoderOptions =  {
 if (window.matchMedia('only screen and (max-width: 480px) and (orientation: portrait)')) {
   geocoderOptions.placeholder = 'Search by your address'
 }
-const geocoder = new L.Control.Geocoder('search-pRNNjzA', geocoderOptions).addTo(map)
+const geocoder = new L.Control.Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
 document.getElementById('geocoder').appendChild(geocoder.getContainer())
 geocoder.focus()
 
@@ -173,22 +204,7 @@ geocoder.on('select', function (e) {
   var label = e.feature.properties.label
   var latlng = e.latlng
 
-  store.dispatch({
-    type: 'SET_SEARCH_QUERY',
-    query: label
-  })
-
-  displayCommunityBoard(latlng)
-
-  // Set url
-  var querystring = '?query=' + encodeURIComponent(label)
-    + '&lat=' + encodeURIComponent(latlng.lat)
-    + '&lng=' + encodeURIComponent(latlng.lng)
-  window.history.pushState({
-    lat: latlng.lat,
-    lng: latlng.lng,
-    query: label
-  }, null, querystring)
+  selectLocation(latlng, label)
 })
 
 // If geocoder is reset, also clear everything else
@@ -236,6 +252,25 @@ window.setTimeout(function () {
     displayCommunityBoard(latlng)
   }
 }, 0)
+
+function selectLocation (latlng, label) {
+  store.dispatch({
+    type: 'SET_SEARCH_QUERY',
+    query: label
+  })
+
+  displayCommunityBoard(latlng)
+
+  // Set url
+  var querystring = '?query=' + encodeURIComponent(label)
+    + '&lat=' + encodeURIComponent(latlng.lat)
+    + '&lng=' + encodeURIComponent(latlng.lng)
+  window.history.pushState({
+    lat: latlng.lat,
+    lng: latlng.lng,
+    query: label
+  }, null, querystring)
+}
 
 // Render the community board view
 // TODO: Cache & share references to elements.

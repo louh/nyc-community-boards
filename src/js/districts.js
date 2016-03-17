@@ -46,7 +46,7 @@ DATA_FILES.forEach((file) => {
   let response = window.fetch(file)
     .then(function (response) {
       if (response.status !== 200) {
-        console.log('error getting boundary geojson. status code: ' + response.status)
+        throw new Error(`status code: ${response.status}`)
         return
       }
 

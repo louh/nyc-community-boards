@@ -12,7 +12,7 @@ const DISTRICTS_URL = 'site/data/districts.geojson'
 let districtsPromise = window.fetch(DISTRICTS_URL)
   .then(function (response) {
     if (response.status !== 200) {
-      console.log('error getting boundary geojson. status code: ' + response.status)
+      throw new Error(`status code: ${response.status}`)
       return
     }
 
