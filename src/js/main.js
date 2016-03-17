@@ -331,11 +331,6 @@ function showMessage (msg) {
 }
 
 function addDistrictGeoToMap (geojson) {
-  // Clear previous district if any
-  if (districtLayer) {
-    map.removeLayer(districtLayer)
-  }
-
   districtLayer = L.geoJson(geojson, {
     style: districtStyle
   }).addTo(map)
@@ -364,8 +359,14 @@ function addDistrictGeoToMap (geojson) {
 }
 
 function displayCommunityBoard (latlng) {
+  // Clear previous district if any
+  if (districtLayer) {
+    map.removeLayer(districtLayer)
+  }
+
   // Find and add district
   const districtGeo = findDistricts(latlng)
+
   districtGeo.then((geo) => {
     if (geo && geo.features.length > 0) {
       const id = geo.features[0].properties.communityDistrict
