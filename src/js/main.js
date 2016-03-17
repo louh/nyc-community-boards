@@ -31,11 +31,11 @@ let map = L.map('map', {
   // Allows fractional zoom on fitBounds() (future Leaflets)
   zoomSnap: 0.25,
   // If iframed, disable scroll wheel
-  scrollWheelZoom: (window.self === window.top) ? true : false,
+  scrollWheelZoom: (window.self === window.top),
   // If iframed & touchscreen, disable dragging & tap to prevent Leaflet
   // from hijacking the page scroll.
-  dragging: (window.self !== window.top && L.Browser.touch) ? false : true,
-  tap: (window.self !== window.top && L.Browser.touch) ? false : true,
+  dragging: !!(window.self !== window.top && L.Browser.touch),
+  tap: !!(window.self !== window.top && L.Browser.touch)
 }).setView([40.7114, -73.9716], initialZoom)
 
 // Set this manually for bundled Leaflet
@@ -51,7 +51,6 @@ map.on('click', function (e) {
   const reverse = `https://search.mapzen.com/v1/reverse?point.lat=${e.latlng.lat}&point.lon=${e.latlng.lng}&size=1&layers=address&api_key=${SEARCH_API_KEY}`
 
   let latlng = e.latlng
-  let label = 'nope'
 
   // Show marker on clicked location immediately
   geocoder.showMarker(null, latlng)
@@ -61,7 +60,6 @@ map.on('click', function (e) {
     .then(function (response) {
       if (response.status !== 200) {
         throw new Error(`status code: ${response.status}`)
-        return
       }
 
       return response.json()
@@ -77,7 +75,7 @@ map.on('click', function (e) {
     })
 })
 
-let hash = new L.Hash(map)
+let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 
 // Add Tangram scene layer if webgl present.
 // For debug reasons you can also just pass webgl=false in the params
@@ -132,7 +130,7 @@ if (feature.webgl && !(queryparams.webgl)) {
   }
 
   L.tileLayer(tileUrl, {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.',
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
   }).addTo(map)
 
   // GeoJSON boundary
@@ -147,7 +145,6 @@ if (feature.webgl && !(queryparams.webgl)) {
     .then(function (response) {
       if (response.status !== 200) {
         throw new Error(`status code: ${response.status}`)
-        return
       }
 
       return response.json()
@@ -172,7 +169,7 @@ const districtStyle = {
 let districtLayer
 
 // Add Pelias geocoding plugin
-let geocoderOptions =  {
+let geocoderOptions = {
   markers: {
     icon: L.divIcon({ className: 'point-marker' }),
     clickable: false,
@@ -227,7 +224,7 @@ geocoder.showMarker = function (text, latlng) {
   const markerOptions = (typeof this.options.markers === 'object') ? this.options.markers : {}
 
   if (this.options.markers) {
-    this.marker = new L.marker(latlng, markerOptions)
+    this.marker = new L.Marker(latlng, markerOptions)
     this._map.addLayer(this.marker)
     this.markers.push(this.marker)
   }
@@ -240,7 +237,7 @@ window.setTimeout(function () {
     geocoder._input.focus()
     // Fire an event to hide the search box, which is empty
     // at this point so it looks weird
-    geocoder._input.dispatchEvent(new KeyboardEvent('keyup', {
+    geocoder._input.dispatchEvent(new window.KeyboardEvent('keyup', {
       'cancelable': true
     }))
   }
@@ -262,9 +259,9 @@ function selectLocation (latlng, label) {
   displayCommunityBoard(latlng)
 
   // Set url
-  var querystring = '?query=' + encodeURIComponent(label)
-    + '&lat=' + encodeURIComponent(latlng.lat)
-    + '&lng=' + encodeURIComponent(latlng.lng)
+  var querystring = '?query=' + encodeURIComponent(label) +
+    '&lat=' + encodeURIComponent(latlng.lat) +
+    '&lng=' + encodeURIComponent(latlng.lng)
   window.history.pushState({
     lat: latlng.lat,
     lng: latlng.lng,
@@ -324,7 +321,6 @@ function clearData () {
 }
 
 function clearUrl () {
-  const querystring = ''
   window.history.pushState({}, null, window.location.origin + window.location.pathname + window.location.hash)
 }
 
@@ -361,7 +357,7 @@ function addDistrictGeoToMap (geojson) {
   }
   // On landscape mobile size screens, use left side padding only
   if (window.matchMedia('(max-width: 736px) and (orientation: landscape)').matches === true) {
-    fitOptions.paddingTopLeft  = [0, 0]
+    fitOptions.paddingTopLeft = [0, 0]
     fitOptions.paddingBottomRight = [0, 0]
   }
   // southwest latlng, northeast latlng

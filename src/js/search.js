@@ -13,7 +13,6 @@ let districtsPromise = window.fetch(DISTRICTS_URL)
   .then(function (response) {
     if (response.status !== 200) {
       throw new Error(`status code: ${response.status}`)
-      return
     }
 
     return response.json()

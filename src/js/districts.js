@@ -1,20 +1,5 @@
 'use strict'
 
-// get community board data after scraping the site.
-const MANHATTAN_SCRAPE_API = 'https://www.kimonolabs.com/api/7d69jowa?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-const BRONX_SCRAPE_API = 'https://www.kimonolabs.com/api/aaacwz8s?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-const BROOKLYN_SCRAPE_API = 'https://www.kimonolabs.com/api/897hsqhs?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-const QUEENS_SCRAPE_API = 'https://www.kimonolabs.com/api/95v22a6a?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-const STATEN_ISLAND_SCRAPE_API = 'https://www.kimonolabs.com/api/8fzz99xg?apikey=k1MWSQDQssA3gjPVpJov571Lv4fdGO4O'
-
-const SCRAPE_API = [
-  MANHATTAN_SCRAPE_API,
-  BRONX_SCRAPE_API,
-  BROOKLYN_SCRAPE_API,
-  QUEENS_SCRAPE_API,
-  STATEN_ISLAND_SCRAPE_API
-]
-
 // data stored locally
 const MANHATTAN_DATA_FILE = 'site/data/manhattan.json'
 const BRONX_DATA_FILE = 'site/data/bronx.json'
@@ -40,14 +25,12 @@ const DATA_FILES = [
 // TODO: optimize later
 
 let data = []
-let loaded = 0
 
 DATA_FILES.forEach((file) => {
   let response = window.fetch(file)
     .then(function (response) {
       if (response.status !== 200) {
         throw new Error(`status code: ${response.status}`)
-        return
       }
 
       return response.json()
