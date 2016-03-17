@@ -37,7 +37,7 @@
     "cssnano": "^3.5.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
-    "gulp-cssimport": "^2.1.0",
+    "gulp-cssimport": "^3.0.2",
     "gulp-cssnano": "^2.1.1",
     "gulp-livereload": "^3.8.1",
     "gulp-rename": "^1.2.2",

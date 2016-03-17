@@ -34,8 +34,8 @@ let map = L.map('map', {
   scrollWheelZoom: (window.self === window.top),
   // If iframed & touchscreen, disable dragging & tap to prevent Leaflet
   // from hijacking the page scroll.
-  dragging: !!(window.self !== window.top && L.Browser.touch),
-  tap: !!(window.self !== window.top && L.Browser.touch)
+  dragging: !(window.self !== window.top && L.Browser.touch),
+  tap: !(window.self !== window.top && L.Browser.touch)
 }).setView([40.7114, -73.9716], initialZoom)
 
 // Set this manually for bundled Leaflet
@@ -48,9 +48,8 @@ map.addControl(L.control.zoom({
 }))
 
 map.on('click', function (e) {
-  const reverse = `https://search.mapzen.com/v1/reverse?point.lat=${e.latlng.lat}&point.lon=${e.latlng.lng}&size=1&layers=address&api_key=${SEARCH_API_KEY}`
-
-  let latlng = e.latlng
+  const latlng = e.latlng
+  const reverse = `https://search.mapzen.com/v1/reverse?point.lat=${latlng.lat}&point.lon=${latlng.lng}&size=1&layers=address&api_key=${SEARCH_API_KEY}`
 
   // Show marker on clicked location immediately
   geocoder.showMarker(null, latlng)
