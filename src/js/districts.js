@@ -1,5 +1,3 @@
-'use strict'
-
 // data stored locally
 const MANHATTAN_DATA_FILE = 'site/data/manhattan.json'
 const BRONX_DATA_FILE = 'site/data/bronx.json'

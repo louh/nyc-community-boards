@@ -1,5 +1,3 @@
-'use strict'
-
 import inside from 'turf-inside'
 
 const turf = {
