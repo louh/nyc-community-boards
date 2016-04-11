@@ -81,41 +81,9 @@ let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 if (feature.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'https://mapzen.com/carto/refill-style/2.0/refill-style.yaml',
+    scene: 'site/scene.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
-
-  layer.scene.subscribe({
-    load: function (msg) {
-      // Tangram requires a source URL to be fully qualified, so rebuild the
-      // relative reference to the URL using the current location path
-      const url = window.location.origin + window.location.pathname + BOUNDARY_GEOJSON
-      const layerStyle = {
-        data: { source: 'city-boundary' },
-        draw: {
-          lines: {
-            color: '#bbb',
-            width: '4px',
-            order: 400, // This should be under labels
-            join: 'round'
-          }
-        }
-      }
-
-      // Don't do this here
-      // layer.scene.setDataSource('city-boundary', { type: 'GeoJSON', url: url })
-
-      // Instead, we can modify the config directly, just before it renders
-      msg.config.sources['city-boundary'] = {
-        type: 'GeoJSON',
-        url: url
-      }
-      msg.config.layers['city-boundary'] = layerStyle
-
-      // layer.scene.rebuild()
-      // No need to return msg; this is passed in by reference
-    }
-  })
 
   // Debug
   window.layer = layer
