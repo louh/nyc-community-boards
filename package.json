@@ -26,7 +26,7 @@
     "redux-logger": "^2.6.1",
     "turf-extent": "^1.0.4",
     "turf-inside": "^1.1.4",
-    "whatwg-fetch": "^0.11.0"
+    "whatwg-fetch": "^0.11.1"
   },
   "devDependencies": {
     "babel-polyfill": "^6.7.4",
