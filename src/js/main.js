@@ -335,12 +335,12 @@ function displayCommunityBoard (latlng) {
   // Find and add district
   const districtGeo = findDistricts(latlng)
 
-  districtGeo.then(geo => {
+  districtGeo.then((geo) => {
     if (geo) {
       addDistrictGeoToMap(geo)
 
       getDistrictById(geo.id)
-        .then(data => {
+        .then((data) => {
           if (data.error === true) {
             showMessage(data.message)
           } else {
