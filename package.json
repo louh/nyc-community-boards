@@ -50,6 +50,7 @@
     "snazzy": "^3.0.1",
     "standard": "^6.0.4",
     "surge": "^0.17.3",
+    "topojson": "^1.6.26",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },

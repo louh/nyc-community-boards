@@ -14,8 +14,16 @@ These are some alternatives:
 
 ## Data sources
 
-- Community district GeoJSON from [data.beta.nyc](http://data.beta.nyc/dataset/nyc-community-districts/resource/d826bbc6-a376-4642-8d8b-3a700d701557). Here is the original data [as GIS shapefile](https://data.cityofnewyork.us/City-Government/Community-Districts/yfnk-k7r4).
+- Community district boundaries from [NYC Planning](http://www1.nyc.gov/site/planning/data-maps/open-data/districts-download-metadata.page) ([metadata](http://www1.nyc.gov/assets/planning/download/pdf/data-maps/open-data/nycd_metadata.pdf?v=16a)). Edition 16A, updated February 23, 2016.
 - Community board information from [NYC Mayor's Community Affairs Unit - Find Your Community Board](http://www.nyc.gov/html/cau/html/cb/cb.shtml)
+
+### Converting district boundaries to topojson
+
+The source GeoJSON is converted to a TopoJSON to save on space and to resolve topology issues from third-party simplified GeoJSON files. To download the latest boundary file and convert it to a TopoJSON, run in shell:
+
+```sh
+./data.sh
+```
 
 ## Deploy
 

@@ -142,13 +142,13 @@ let geocoderOptions = {
     clickable: false,
     keyboard: false
   },
-  // TODO: update geocoder & fix this
   pointIcon: false,
   polygonIcon: false,
   expanded: true,
   fullWidth: false,
   panToPoint: false,
-  autocomplete: false,
+  autocomplete: false, // Turn this on when we can do autocomplete that is focused / filtered by area
+  layers: ['address'],
   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
   attribution: ''
 }
@@ -335,20 +335,18 @@ function displayCommunityBoard (latlng) {
   // Find and add district
   const districtGeo = findDistricts(latlng)
 
-  districtGeo.then((geo) => {
-    if (geo && geo.features.length > 0) {
-      const id = geo.features[0].properties.communityDistrict
-      const district = getDistrictById(id)
-
+  districtGeo.then(geo => {
+    if (geo) {
       addDistrictGeoToMap(geo)
 
-      district.then(function (data) {
-        if (data.error === true) {
-          showMessage(data.message)
-        } else {
-          fillOutData(data)
-        }
-      })
+      getDistrictById(geo.id)
+        .then(data => {
+          if (data.error === true) {
+            showMessage(data.message)
+          } else {
+            fillOutData(data)
+          }
+        })
     } else {
       showMessage('This site only has results for New York City.')
 
