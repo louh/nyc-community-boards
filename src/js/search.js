@@ -43,20 +43,14 @@ export function findDistricts (latlng) {
       }
     }
 
-    let result
-
     // Test all the districts to find the geometry that the latlng point
     // is located in
-    features.forEach((feature) => {
+    for (let feature of features) {
       if (turf.inside(location, feature)) {
-        result = feature
+        return feature
       }
-    })
-
-    if (result) {
-      return result
-    } else {
-      return null
     }
+
+    return null
   })
 }
