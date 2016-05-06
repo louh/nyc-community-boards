@@ -22,7 +22,7 @@
     "leaflet": "1.0.0-beta.2",
     "leaflet-geocoder-mapzen": "^1.5.2",
     "leaflet-hash": "^0.2.1",
-    "redux": "^3.5.1",
+    "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "turf-extent": "^1.0.4",
     "turf-inside": "^1.1.4",
