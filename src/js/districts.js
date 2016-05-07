@@ -24,28 +24,28 @@ const DATA_FILES = [
 
 let data = []
 
-DATA_FILES.forEach((file) => {
+DATA_FILES.forEach(file => {
   let response = window.fetch(file)
-    .then(function (response) {
-      if (response.status !== 200) {
+    .then(response => {
+      if (!response.ok) {
         throw new Error(`status code: ${response.status}`)
       }
 
       return response.json()
     })
-    .catch(function (error) {
-      console.log(`error getting ${file}: ${error}`)
+    .catch(error => {
+      console.log(`error getting ${file}: ${error.message}`)
     })
 
   data.push(response)
 })
 
 let districts = Promise.all(data)
-  .then(function (values) {
-    let districts = values.reduce(function (previous, current, index, all) {
+  .then(values => {
+    let districts = values.reduce((previous, current, index, all) => {
       let boards = current.results.community_boards
       let boroughId = getBoroughId(current.results.borough[0].label)
-      let edited = boards.map(function (board) {
+      let edited = boards.map(board => {
         board.boroughId = boroughId
         return board
       })
@@ -59,7 +59,7 @@ let districts = Promise.all(data)
 // between 1 - 5 and corresponds to a NYC borough, and XX is the
 // community board number, return a bunch of information about it
 export function getDistrictById (id) {
-  return districts.then(function (data) {
+  return districts.then(data => {
     const borough = getBoroughName(id)
     const boardNumber = normalizeBoardNumber(id)
     const scraped = getScrapedData(data, getBoroughId(borough), boardNumber)
@@ -80,7 +80,7 @@ export function getDistrictById (id) {
       }
     }
   })
-  .catch(function (error) {
+  .catch(error => {
     console.log(error)
     return {
       error: true,
@@ -133,7 +133,7 @@ function getBoroughId (string) {
 function getScrapedData (districts, boroughId, boardNumber) {
   // Filter returns an array, but there should only be one match
   // shift() converts the first item of the array into a standalone object
-  return districts.filter((district) => {
+  return districts.filter(district => {
     return district.boroughId === boroughId && district.index === boardNumber
   }).shift()
 }
