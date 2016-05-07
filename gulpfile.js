@@ -2,14 +2,15 @@
 
 var gulp = require('gulp')
 var gutil = require('gulp-util')
-var livereload = require('gulp-livereload')
+var browserSync = require('browser-sync')
 
 var paths = {
   styles: 'src/css/**/*.scss',
-  scripts: 'src/js/**/*.js'
+  scripts: 'src/js/**/*.js',
+  app: 'index.html'
 }
 
-gulp.task('default', ['css', 'js', 'watch'])
+gulp.task('default', ['serve'])
 
 gulp.task('css', function () {
   var sass = require('gulp-sass')
@@ -25,7 +26,7 @@ gulp.task('css', function () {
     .pipe(cssnano({ zindex: false }))
     .pipe(rename('styles.css'))
     .pipe(gulp.dest('./site/css'))
-    .pipe(livereload())
+    .pipe(browserSync.stream())
 })
 
 gulp.task('js', function () {
@@ -53,8 +54,18 @@ gulp.task('js', function () {
     .pipe(gulp.dest('./site/js'))
 })
 
-gulp.task('watch', function () {
-  livereload.listen()
+// create a task that ensures the `js` task is complete before
+// reloading browsers
+gulp.task('js-watch', ['js'], browserSync.reload)
+
+gulp.task('serve', ['css'], function () {
+  browserSync.init({
+    server: {
+      baseDir: "./"
+    }
+  })
+
   gulp.watch(paths.styles, ['css'])
-  gulp.watch(paths.scripts, ['js'])
+  gulp.watch(paths.scripts, ['js-watch'])
+  gulp.watch(paths.app).on('change', browserSync.reload)
 })
