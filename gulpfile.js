@@ -58,7 +58,7 @@ gulp.task('js', function () {
 // reloading browsers
 gulp.task('js-watch', ['js'], browserSync.reload)
 
-gulp.task('serve', ['css'], function () {
+gulp.task('serve', ['css', 'js'], function () {
   browserSync.init({
     server: {
       baseDir: "./"
