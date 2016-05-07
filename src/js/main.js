@@ -13,7 +13,7 @@ const turf = {
 }
 
 import { store } from './store'
-import { feature } from './feature'
+import { detects } from './detects'
 import { findDistricts } from './search'
 import { getDistrictById } from './districts'
 
@@ -78,7 +78,7 @@ let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 
 // Add Tangram scene layer if webgl present.
 // For debug reasons you can also just pass webgl=false in the params
-if (feature.webgl && !(queryparams.webgl)) {
+if (detects.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
     scene: 'site/scene.yaml',

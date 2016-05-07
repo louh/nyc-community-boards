@@ -1,5 +1,5 @@
 // Influenced by https://github.com/viljamis/feature.js/
-export const feature = {
+export const detects = {
   webgl: (function () {
     try {
       let canvas = document.createElement('canvas')
