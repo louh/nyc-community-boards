@@ -8,7 +8,7 @@ TOPOJSON="./node_modules/.bin/topojson"
 
 # Make sure the `topojson' command is installed.
 if [ ! -e $TOPOJSON ]; then
-  echo "local topojson command not found, please run npm install first"
+  echo "local topojson command not found, please run npm install first" 1>&2
   exit 1
 fi
 
