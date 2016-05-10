@@ -1,9 +1,12 @@
-// data stored locally
-const MANHATTAN_DATA_FILE = 'site/data/manhattan.json'
-const BRONX_DATA_FILE = 'site/data/bronx.json'
-const BROOKLYN_DATA_FILE = 'site/data/brooklyn.json'
-const QUEENS_DATA_FILE = 'site/data/queens.json'
-const STATEN_ISLAND_DATA_FILE = 'site/data/staten-island.json'
+// Community districts data scraped via Kimono
+// (which is no longer available - TODO: get another
+// source of info)
+// The Kimono scrapes are imported here
+import MANHATTAN_DATA_FILE from '../data/manhattan.json'
+import BRONX_DATA_FILE from '../data/bronx.json'
+import BROOKLYN_DATA_FILE from '../data/brooklyn.json'
+import QUEENS_DATA_FILE from '../data/queens.json'
+import STATEN_ISLAND_DATA_FILE from '../data/staten-island.json'
 
 const DATA_FILES = [
   MANHATTAN_DATA_FILE,
@@ -13,80 +16,48 @@ const DATA_FILES = [
   STATEN_ISLAND_DATA_FILE
 ]
 
+// And, then for each data file, we combine them into one
+let districts = DATA_FILES.reduce((previous, current, index, all) => {
+  let boards = current.results.community_boards
+  let boroughId = getBoroughId(current.results.borough[0].label)
+  let edited = boards.map(board => {
+    board.boroughId = boroughId
+    return board
+  })
+  let added = previous.concat(edited)
+  return added
+}, [])
+
+// Given a community board ID in the format of YXX where Y is
+// between 1 - 5 and corresponds to a NYC borough, and XX is the
+// community board number, return a bunch of information about it
+
 // 1 - Manhattan
 // 2 - Bronx
 // 3 - Brooklyn
 // 4 - Queens
 // 5 - Staten Island
 
-// Just load everything right away
-// TODO: optimize later
-
-let data = []
-
-DATA_FILES.forEach(file => {
-  let response = window.fetch(file)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`status code: ${response.status}`)
-      }
-
-      return response.json()
-    })
-    .catch(error => {
-      console.log(`error getting ${file}: ${error.message}`)
-    })
-
-  data.push(response)
-})
-
-let districts = Promise.all(data)
-  .then(values => {
-    let districts = values.reduce((previous, current, index, all) => {
-      let boards = current.results.community_boards
-      let boroughId = getBoroughId(current.results.borough[0].label)
-      let edited = boards.map(board => {
-        board.boroughId = boroughId
-        return board
-      })
-      let added = previous.concat(edited)
-      return added
-    }, [])
-    return districts
-  })
-
-// Given a community board ID in the format of YXX where Y is
-// between 1 - 5 and corresponds to a NYC borough, and XX is the
-// community board number, return a bunch of information about it
 export function getDistrictById (id) {
-  return districts.then(data => {
-    const borough = getBoroughName(id)
-    const boardNumber = normalizeBoardNumber(id)
-    const scraped = getScrapedData(data, getBoroughId(borough), boardNumber)
+  const borough = getBoroughName(id)
+  const boardNumber = normalizeBoardNumber(id)
+  const scraped = getScrapedData(districts, getBoroughId(borough), boardNumber)
 
-    // Return all the data
-    if (scraped) {
-      return {
-        id: id,
-        borough: borough,
-        boardNumber: boardNumber,
-        label: borough + ' Community Board ' + boardNumber.toString(),
-        data: scraped
-      }
-    } else {
-      return {
-        error: true,
-        message: 'There is no community board at that address.'
-      }
+  // Return all the data
+  if (scraped) {
+    return {
+      id: id,
+      borough: borough,
+      boardNumber: boardNumber,
+      label: borough + ' Community Board ' + boardNumber.toString(),
+      data: scraped
     }
-  })
-  .catch(error => {
-    console.log(error)
+  } else {
     return {
       error: true,
-      message: 'Error loading borough information, please try again later.'
+      message: 'There is no community board at that address.'
     }
-  })
+  }
 }
 
 // Given the community board ID in the format YXX (as above)

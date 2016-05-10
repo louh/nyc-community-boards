@@ -339,14 +339,13 @@ function displayCommunityBoard (latlng) {
     if (geo) {
       addDistrictGeoToMap(geo)
 
-      getDistrictById(geo.id)
-        .then(data => {
-          if (data.error === true) {
-            showMessage(data.message)
-          } else {
-            fillOutData(data)
-          }
-        })
+      const data = getDistrictById(geo.id)
+
+      if (data.error === true) {
+        showMessage(data.message)
+      } else {
+        fillOutData(data)
+      }
     } else {
       showMessage('This site only has results for New York City.')
 

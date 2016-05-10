@@ -60,8 +60,9 @@ gulp.task('js-watch', ['js'], browserSync.reload)
 
 gulp.task('serve', ['css', 'js'], function () {
   browserSync.init({
+    browser: 'google chrome',
     server: {
-      baseDir: "./"
+      baseDir: './',
     }
   })
 
