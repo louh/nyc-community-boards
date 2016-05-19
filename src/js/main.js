@@ -147,7 +147,7 @@ let geocoderOptions = {
   expanded: true,
   fullWidth: false,
   panToPoint: false,
-  autocomplete: false, // Turn this on when we can do autocomplete that is focused / filtered by area
+  autocomplete: true,
   layers: ['address'],
   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
   attribution: ''
