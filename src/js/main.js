@@ -6,10 +6,10 @@ import Tangram from 'tangram' // via browserify-shim
 import 'leaflet-hash'
 import 'leaflet-geocoder-mapzen'
 
-import extent from 'turf-extent'
+import bbox from '@turf/bbox'
 
 const turf = {
-  extent
+  bbox
 }
 
 import { store } from './store'
@@ -305,7 +305,7 @@ function addDistrictGeoToMap (geojson) {
 
   // Zoom to bounds
   // WSEN order (west, south, east, north)
-  const bbox = turf.extent(geojson)
+  const bbox = turf.bbox(geojson)
   let fitOptions = {
     paddingTopLeft: [250, 10],
     paddingBottomRight: [10, 10],

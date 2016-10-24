@@ -1,5 +1,5 @@
 import topojson from 'topojson'
-import inside from 'turf-inside'
+import inside from '@turf/inside'
 
 const turf = {
   inside
@@ -17,6 +17,7 @@ let districtsPromise = window.fetch(DISTRICTS_URL)
     return response.json()
   })
   .then(json => {
+    console.log(json)
     // Convert to GeoJSON
     if (json.type === 'Topology') {
       return topojson.feature(json, json.objects['districts'])

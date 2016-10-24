@@ -1,4 +1,4 @@
-import: https://mapzen.com/carto/refill-style/2.0/refill-style.yaml
+import: https://mapzen.com/carto/refill-style/refill-style.yaml
 
 sources:
   city-boundary:
