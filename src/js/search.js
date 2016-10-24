@@ -1,4 +1,4 @@
-import topojson from 'topojson'
+import { feature } from 'topojson'
 import inside from '@turf/inside'
 
 const turf = {
@@ -17,16 +17,15 @@ let districtsPromise = window.fetch(DISTRICTS_URL)
     return response.json()
   })
   .then(json => {
-    console.log(json)
     // Convert to GeoJSON
     if (json.type === 'Topology') {
-      return topojson.feature(json, json.objects['districts'])
+      return feature(json, json.objects['districts'])
     } else {
       return json
     }
   })
   .catch(error => {
-    console.log('error getting district boundaries: ' + error.message)
+    console.error('error getting district boundaries: ' + error.message)
   })
 
 // Given a lat-lng location, find the district it's inside
