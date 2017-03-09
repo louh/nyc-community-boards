@@ -7,7 +7,7 @@ var browserSync = require('browser-sync')
 var paths = {
   styles: 'src/css/**/*.scss',
   scripts: 'src/js/**/*.js',
-  app: 'index.html'
+  app: 'public/index.html'
 }
 
 gulp.task('default', ['serve'])
@@ -25,7 +25,7 @@ gulp.task('css', function () {
     .pipe(cssimport())
     .pipe(cssnano({ zindex: false }))
     .pipe(rename('styles.css'))
-    .pipe(gulp.dest('./site/css'))
+    .pipe(gulp.dest('./public/css'))
     .pipe(browserSync.stream())
 })
 
@@ -51,7 +51,7 @@ gulp.task('js', function () {
       .pipe(uglify())
       .on('error', gutil.log)
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('./site/js'))
+    .pipe(gulp.dest('./public/js'))
 })
 
 // create a task that ensures the `js` task is complete before
@@ -62,7 +62,7 @@ gulp.task('serve', ['css', 'js'], function () {
   browserSync.init({
     browser: 'google chrome',
     server: {
-      baseDir: './',
+      baseDir: './public',
     }
   })
 

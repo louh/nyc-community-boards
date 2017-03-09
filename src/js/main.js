@@ -17,7 +17,7 @@ import { detects } from './detects'
 import { findDistricts } from './search'
 import { getDistrictById } from './districts'
 
-const BOUNDARY_GEOJSON = 'site/data/boundaries.geojson'
+const BOUNDARY_GEOJSON = 'data/boundaries.geojson'
 const SEARCH_API_KEY = 'search-pRNNjzA'
 
 // Query string parsing
@@ -81,7 +81,7 @@ let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 if (detects.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'site/scene.yaml',
+    scene: 'scene.yaml',
     attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
   }).addTo(map)
 

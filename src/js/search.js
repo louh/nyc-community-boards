@@ -5,7 +5,7 @@ const turf = {
   inside
 }
 
-const DISTRICTS_URL = 'site/data/districts.topojson'
+const DISTRICTS_URL = 'data/districts.topojson'
 
 // Load
 let districtsPromise = window.fetch(DISTRICTS_URL)
