@@ -97,7 +97,7 @@ if (detects.webgl && !(queryparams.webgl)) {
   }
 
   L.tileLayer(tileUrl, {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
   }).addTo(map)
 
   // GeoJSON boundary
