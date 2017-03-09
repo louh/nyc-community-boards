@@ -16,7 +16,8 @@
     "start": "gulp",
     "test": "standard ./src/js/**/*.js --verbose | snazzy",
     "predeploy": "npm test",
-    "deploy": "surge --domain nyc-community-boards.surge.sh"
+    "deploy:gh-pages": "gh-pages --dist public",
+    "deploy:surge": "surge public --domain nyc-community-boards.surge.sh"
   },
   "main": "index.js",
   "dependencies": {
