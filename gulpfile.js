@@ -12,6 +12,8 @@ var paths = {
 
 gulp.task('default', ['serve'])
 
+gulp.task('build', ['css', 'js'])
+
 gulp.task('css', function () {
   var sass = require('gulp-sass')
   var autoprefix = require('gulp-autoprefixer')
@@ -58,7 +60,7 @@ gulp.task('js', function () {
 // reloading browsers
 gulp.task('js-watch', ['js'], browserSync.reload)
 
-gulp.task('serve', ['css', 'js'], function () {
+gulp.task('serve', ['build'], function () {
   browserSync.init({
     browser: 'google chrome',
     server: {

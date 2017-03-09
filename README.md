@@ -29,16 +29,16 @@ The source GeoJSON is converted to a TopoJSON to save on space and to resolve to
 
 There are two options for deployment:
 
+To GitHub Pages (default). https://louh.github.io/nyc-community-boards/
+
+```
+npm run deploy
+```
+
 A surge.sh site. https://nyc-community-boards.surge.sh/
 
 ```
 npm run deploy:surge
 ```
 
-To GitHub Pages. https://louh.github.io/nyc-community-boards/
-
-```
-npm run deploy:gh-pages
-```
-
-Be sure to build the site and run tests before deployment.
+Build pipeline and tests will run before deployment.

@@ -13,10 +13,13 @@
     "url": "https://github.com/louh/nyc-community-boards/issues"
   },
   "scripts": {
+    "postinstall": "npm run build",
     "start": "gulp",
     "test": "standard ./src/js/**/*.js --verbose | snazzy",
-    "predeploy": "npm test",
-    "deploy:gh-pages": "gh-pages --dist public",
+    "build": "gulp build",
+    "predeploy": "npm test && npm run build",
+    "deploy": "gh-pages --dist public",
+    "predeploy:surge": "npm run predeploy",
     "deploy:surge": "surge public --domain nyc-community-boards.surge.sh"
   },
   "main": "index.js",
