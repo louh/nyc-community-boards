@@ -27,9 +27,18 @@ The source GeoJSON is converted to a TopoJSON to save on space and to resolve to
 
 ## Deploy
 
-There is a deploy script to send files to https-enabled surge.sh site. https://nyc-community-boards.surge.sh/
+There are two options for deployment:
+
+A surge.sh site. https://nyc-community-boards.surge.sh/
 
 ```
-npm run deploy
+npm run deploy:surge
 ```
 
+To GitHub Pages. https://louh.github.io/nyc-community-boards/
+
+```
+npm run deploy:gh-pages
+```
+
+Be sure to build the site and run tests before deployment.
