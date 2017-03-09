@@ -1,0 +1,17 @@
+import: https://mapzen.com/carto/refill-style/refill-style.yaml
+
+sources:
+  city-boundary:
+    type: GeoJSON
+    url: data/boundaries.geojson
+
+layers:
+  city-boundary:
+    data:
+      source: city-boundary
+    draw:
+      lines:
+        color: '#bbb'
+        width: 4px
+        order: 400 # This should be under labels
+        join: round
