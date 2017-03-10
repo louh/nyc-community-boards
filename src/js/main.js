@@ -67,6 +67,10 @@ map.on('click', function (e) {
       const label = response.features[0].properties.label
 
       geocoder._input.value = label
+      // Show reset button
+      if (geocoder._input.value.length > 0) {
+        geocoder._reset.classList.remove('leaflet-pelias-hidden')
+      }
       selectLocation(latlng, label)
     })
     .catch(function (error) {
