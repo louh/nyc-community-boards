@@ -43,6 +43,7 @@
     "browserify": "14.1.0",
     "browserify-shim": "3.8.13",
     "cssnano": "3.10.0",
+    "gh-pages": "0.12.0",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.1",
     "gulp-cssimport": "5.0.0",
