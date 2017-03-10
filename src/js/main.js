@@ -148,7 +148,7 @@ let geocoderOptions = {
   fullWidth: false,
   panToPoint: false,
   autocomplete: true,
-  layers: ['address'],
+  layers: ['venue', 'address'],
   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
   attribution: ''
 }
@@ -309,7 +309,7 @@ function addDistrictGeoToMap (geojson) {
   let fitOptions = {
     paddingTopLeft: [250, 10],
     paddingBottomRight: [10, 10],
-    animate: true
+    animate: false
   }
   // For portrait mobile size screens that match the CSS breakpoint,
   // no side padding, but use top and bottom padding
