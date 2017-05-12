@@ -2,7 +2,7 @@ import 'babel-polyfill'
 import 'whatwg-fetch' // Polyfills window.fetch
 
 import L from 'leaflet'
-import Tangram from 'tangram' // via browserify-shim
+import Tangram from 'tangram/src/module'
 import Geocoder from 'leaflet-geocoder-mapzen'
 import 'leaflet-hash'
 import bbox from '@turf/bbox'
