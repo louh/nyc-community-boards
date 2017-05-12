@@ -3,8 +3,8 @@ import 'whatwg-fetch' // Polyfills window.fetch
 
 import L from 'leaflet'
 import Tangram from 'tangram' // via browserify-shim
+import Geocoder from 'leaflet-geocoder-mapzen'
 import 'leaflet-hash'
-import 'leaflet-geocoder-mapzen'
 
 import bbox from '@turf/bbox'
 
@@ -160,7 +160,7 @@ let geocoderOptions = {
 if (window.matchMedia('only screen and (max-width: 480px) and (orientation: portrait)')) {
   geocoderOptions.placeholder = 'Search by your address'
 }
-const geocoder = new L.Control.Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
+const geocoder = new Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
 document.getElementById('geocoder').appendChild(geocoder.getContainer())
 geocoder.focus()
 
