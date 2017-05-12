@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 
 const LATLNG_PRECISION = 5
 const INITIAL_MAP_CENTER = {

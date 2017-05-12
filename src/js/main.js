@@ -5,12 +5,7 @@ import L from 'leaflet'
 import Tangram from 'tangram' // via browserify-shim
 import Geocoder from 'leaflet-geocoder-mapzen'
 import 'leaflet-hash'
-
 import bbox from '@turf/bbox'
-
-const turf = {
-  bbox
-}
 
 import { store } from './store'
 import { detects } from './detects'
@@ -309,7 +304,7 @@ function addDistrictGeoToMap (geojson) {
 
   // Zoom to bounds
   // WSEN order (west, south, east, north)
-  const bbox = turf.bbox(geojson)
+  const bounds = bbox(geojson)
   let fitOptions = {
     paddingTopLeft: [250, 10],
     paddingBottomRight: [10, 10],
@@ -327,7 +322,7 @@ function addDistrictGeoToMap (geojson) {
     fitOptions.paddingBottomRight = [0, 0]
   }
   // southwest latlng, northeast latlng
-  map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], fitOptions)
+  map.fitBounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]], fitOptions)
 }
 
 function displayCommunityBoard (latlng) {
