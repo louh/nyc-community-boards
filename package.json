@@ -28,7 +28,6 @@
     "leaflet-geocoder-mapzen": "1.9.2",
     "leaflet-hash": "0.2.1",
     "redux": "3.6.0",
-    "redux-logger": "3.0.1",
     "topojson": "3.0.0",
     "@turf/bbox": "4.3.0",
     "@turf/inside": "4.3.0",
