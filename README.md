@@ -14,7 +14,7 @@ These are some alternatives:
 
 ## Data sources
 
-- Community district boundaries from [NYC Planning](http://www1.nyc.gov/site/planning/data-maps/open-data/districts-download-metadata.page) ([metadata](http://www1.nyc.gov/assets/planning/download/pdf/data-maps/open-data/nycd_metadata.pdf?v=16a)). Edition 16A, updated February 23, 2016.
+- Community district boundaries from [NYC Planning](http://www1.nyc.gov/site/planning/data-maps/open-data/districts-download-metadata.page) ([metadata](http://www1.nyc.gov/assets/planning/download/pdf/data-maps/open-data/nycd_metadata.pdf?ver=17b)). Edition 17b, published June 5, 2017.
 - Community board information from [NYC Mayor's Community Affairs Unit - Find Your Community Board](http://www.nyc.gov/html/cau/html/cb/cb.shtml)
 
 ### Converting district boundaries to topojson
