@@ -1,7 +1,7 @@
-import: https://mapzen.com/carto/refill-style/refill-style.yaml
+import: https://www.nextzen.org/carto/refill-style/11/refill-style.zip
 
 global:
-  sdk_mapzen_api_key: search-pRNNjzA
+  sdk_mapzen_api_key: G3-KNosXSwO6K2ZXVUbArA
 
 sources:
   city-boundary:
