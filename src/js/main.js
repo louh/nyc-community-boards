@@ -13,7 +13,7 @@ import { findDistricts } from './search'
 import { getDistrictById } from './districts'
 
 const BOUNDARY_GEOJSON = 'data/boundaries.geojson'
-const SEARCH_API_KEY = 'search-pRNNjzA'
+const SEARCH_API_KEY = 'ge-1793afb81c0a7784' // todo: get unique key
 
 // Query string parsing
 let queryparams = getQueryParams()
@@ -44,7 +44,7 @@ map.addControl(L.control.zoom({
 
 map.on('click', function (e) {
   const latlng = e.latlng
-  const reverse = `https://search.mapzen.com/v1/reverse?point.lat=${latlng.lat}&point.lon=${latlng.lng}&size=1&layers=address&api_key=${SEARCH_API_KEY}`
+  const reverse = `https://api.geocode.earth/v1/reverse?point.lat=${latlng.lat}&point.lon=${latlng.lng}&size=1&layers=address&api_key=${SEARCH_API_KEY}`
 
   // Show marker on clicked location immediately
   geocoder.showMarker(null, latlng)
@@ -136,6 +136,7 @@ let districtLayer
 
 // Add Pelias geocoding plugin
 let geocoderOptions = {
+  url: 'https://api.geocode.earth/v1',
   markers: {
     icon: L.divIcon({ className: 'point-marker' }),
     clickable: false,
