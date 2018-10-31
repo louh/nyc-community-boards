@@ -2,7 +2,7 @@
 @import '../../node_modules/leaflet/dist/leaflet.css';
 
 // Inline the leaflet-geocoder styles
-@import '../../node_modules/leaflet-geocoder-mapzen/src/leaflet-geocoder-mapzen.css';
+@import '../../node_modules/leaflet-geocoder-mapzen/dist/leaflet-geocoder-mapzen.css';
 
 @media #{$mobile-portrait} {
   // Reposition zoom

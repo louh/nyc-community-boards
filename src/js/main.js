@@ -1,8 +1,5 @@
-import 'babel-polyfill'
-import 'whatwg-fetch' // Polyfills window.fetch
-
+/* eslint-global Tangram */
 import L from 'leaflet'
-import Tangram from 'tangram' // via browserify-shim
 import Geocoder from 'leaflet-geocoder-mapzen'
 import 'leaflet-hash'
 import bbox from '@turf/bbox'
