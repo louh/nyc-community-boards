@@ -1,10 +1,10 @@
 {
   "name": "nyc-community-boards",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Find your neighborhood's community board",
   "author": "Lou Huang <lou@louhuang.com>",
   "license": "MIT",
-  "homepage": "http://louhuang.com/nyc-community-boards",
+  "homepage": "https://louh.github.io/nyc-community-boards/",
   "repository": {
     "type": "git",
     "url": "https://github.com/louh/nyc-community-boards.git"
@@ -15,7 +15,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "test": "standard ./src/js/**/*.js --verbose | snazzy",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --public-url /nyc-community-boards",
     "predeploy": "npm test && npm run build",
     "deploy": "gh-pages --dist dist",
     "predeploy:surge": "npm run predeploy",
@@ -53,30 +53,17 @@
     ]
   },
   "eslint": {
-    "parser": "babel-eslint",
+    "parser": "eslint",
     "parserOptions": {
       "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true
-      }
+      "sourceType": "module"
     },
     "env": {
       "browser": true,
       "es6": true
     },
-    "plugins": [
-      "react"
-    ],
     "extends": [
-      "standard",
-      "standard-react"
-    ],
-    "rules": {
-      "jsx-quotes": [
-        "error",
-        "prefer-double"
-      ]
-    }
+      "standard"
+    ]
   }
 }
