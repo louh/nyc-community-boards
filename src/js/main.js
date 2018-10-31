@@ -78,7 +78,7 @@ if (detects.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
     scene: 'scene.yaml',
-    attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
+    attribution: '&copy; OpenStreetMap contributors | <a href="https://www.nextzen.org/">Nextzen</a>'
   }).addTo(map)
 
   // Debug
@@ -93,7 +93,7 @@ if (detects.webgl && !(queryparams.webgl)) {
   }
 
   L.tileLayer(tileUrl, {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
+    attribution: 'Map tiles by <a href="https://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
   }).addTo(map)
 
   // GeoJSON boundary
