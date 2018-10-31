@@ -9,6 +9,8 @@ import { detects } from './detects'
 import { findDistricts } from './search'
 import { getDistrictById } from './districts'
 
+import TANGRAM_SCENE_OBJECT from '../scene.json'
+
 const BOUNDARY_GEOJSON = 'data/boundaries.geojson'
 const SEARCH_API_KEY = 'ge-1793afb81c0a7784' // todo: get unique key
 
@@ -77,7 +79,7 @@ let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 if (detects.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'scene.yaml',
+    scene: TANGRAM_SCENE_OBJECT,
     attribution: '&copy; OpenStreetMap contributors | <a href="https://www.nextzen.org/">Nextzen</a>'
   }).addTo(map)
 
