@@ -1,4 +1,4 @@
-/* eslint-global Tangram */
+/* global Tangram */
 import L from 'leaflet'
 import Geocoder from 'leaflet-geocoder-mapzen'
 import 'leaflet-hash'
