@@ -3,6 +3,5 @@ node_modules
 npm-debug.log
 
 # Built files
-public/css/*.css
-public/js/*.js
-public/js/*.map
+.cache
+dist

@@ -1,5 +1,5 @@
 import { feature } from 'topojson'
-import inside from '@turf/inside'
+import inside from '@turf/boolean-point-in-polygon'
 
 const turf = {
   inside

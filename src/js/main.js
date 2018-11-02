@@ -1,8 +1,5 @@
-import 'babel-polyfill'
-import 'whatwg-fetch' // Polyfills window.fetch
-
+/* global Tangram */
 import L from 'leaflet'
-import Tangram from 'tangram' // via browserify-shim
 import Geocoder from 'leaflet-geocoder-mapzen'
 import 'leaflet-hash'
 import bbox from '@turf/bbox'
@@ -11,6 +8,8 @@ import { store } from './store'
 import { detects } from './detects'
 import { findDistricts } from './search'
 import { getDistrictById } from './districts'
+
+import TANGRAM_SCENE_OBJECT from '../scene.json'
 
 const BOUNDARY_GEOJSON = 'data/boundaries.geojson'
 const SEARCH_API_KEY = 'ge-1793afb81c0a7784' // todo: get unique key
@@ -80,8 +79,8 @@ let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 if (detects.webgl && !(queryparams.webgl)) {
   const layer = Tangram.leafletLayer({
     leaflet: L,
-    scene: 'scene.yaml',
-    attribution: '&copy; OpenStreetMap contributors | <a href="https://mapzen.com/">Mapzen</a>'
+    scene: TANGRAM_SCENE_OBJECT,
+    attribution: '&copy; OpenStreetMap contributors | <a href="https://www.nextzen.org/">Nextzen</a>'
   }).addTo(map)
 
   // Debug
@@ -96,7 +95,7 @@ if (detects.webgl && !(queryparams.webgl)) {
   }
 
   L.tileLayer(tileUrl, {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
+    attribution: 'Map tiles by <a href="https://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
   }).addTo(map)
 
   // GeoJSON boundary
