@@ -1,7 +1,5 @@
-new york city community boards map
-==================================
-
-## work in progress
+NYC Community Boards Map
+========================
 
 ## Why
 
