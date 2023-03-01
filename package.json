@@ -28,7 +28,7 @@
     "leaflet-geocoder-mapzen": "1.9.4",
     "leaflet-hash": "0.2.1",
     "redux": "4.0.1",
-    "tangram": "0.15.4",
+    "tangram": "0.21.1",
     "topojson": "3.0.2"
   },
   "devDependencies": {
