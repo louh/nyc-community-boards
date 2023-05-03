@@ -8,7 +8,7 @@ const turf = {
 const DISTRICTS_URL = 'data/districts.topojson'
 
 // Load
-let districtsPromise = window.fetch(DISTRICTS_URL)
+const districtsPromise = window.fetch(DISTRICTS_URL)
   .then(response => {
     if (!response.ok) {
       throw new Error(`status code: ${response.status}`)
@@ -19,7 +19,7 @@ let districtsPromise = window.fetch(DISTRICTS_URL)
   .then(json => {
     // Convert to GeoJSON
     if (json.type === 'Topology') {
-      return feature(json, json.objects['districts'])
+      return feature(json, json.objects.districts)
     } else {
       return json
     }
@@ -36,16 +36,16 @@ export function findDistricts (latlng) {
   return districtsPromise.then(districts => {
     const features = districts.features
     const location = {
-      'type': 'Feature',
-      'geometry': {
-        'type': 'Point',
-        'coordinates': [latlng.lng, latlng.lat]
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [latlng.lng, latlng.lat]
       }
     }
 
     // Test all the districts to find the geometry that the latlng point
     // is located in
-    for (let feature of features) {
+    for (const feature of features) {
       if (turf.inside(location, feature)) {
         return feature
       }
