@@ -1,20 +1,20 @@
 import { feature } from 'topojson'
 import inside from '@turf/boolean-point-in-polygon'
 
+const DISTRICTS_URL = new URL('../data/districts.topojson', import.meta.url)
+
 const turf = {
   inside
 }
 
-const DISTRICTS_URL = 'data/districts.topojson'
-
 // Load
 const districtsPromise = window.fetch(DISTRICTS_URL)
-  .then(response => {
+  .then(async (response) => {
     if (!response.ok) {
       throw new Error(`status code: ${response.status}`)
     }
 
-    return response.json()
+    return await response.json()
   })
   .then(json => {
     // Convert to GeoJSON
