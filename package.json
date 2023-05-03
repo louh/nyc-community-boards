@@ -15,7 +15,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "test": "standard ./src/js/**/*.js --verbose | snazzy",
-    "build": "parcel build src/index.html --public-url /nyc-community-boards",
+    "build": "parcel build src/index.html --public-url './'",
     "predeploy": "npm test && npm run build",
     "deploy": "gh-pages --dist dist"
   },
