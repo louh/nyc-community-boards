@@ -11,15 +11,15 @@ import { getDistrictById } from './districts'
 
 import TANGRAM_SCENE_OBJECT from '../scene.json'
 
-const BOUNDARY_GEOJSON = 'data/boundaries.geojson'
+const BOUNDARY_GEOJSON = new URL('../data/boundaries.geojson', import.meta.url)
 const SEARCH_API_KEY = 'ge-1793afb81c0a7784' // todo: get unique key
 
 // Query string parsing
-let queryparams = getQueryParams()
+const queryparams = getQueryParams()
 
 // Create a basic Leaflet map
-let initialZoom = (window.innerWidth < 700) ? 10 : 11
-let map = L.map('map', {
+const initialZoom = (window.innerWidth < 700) ? 10 : 11
+const map = L.map('map', {
   zoomControl: false,
   minZoom: 10,
   // Allows fractional zoom on fitBounds() (future Leaflets)
@@ -72,7 +72,7 @@ map.on('click', function (e) {
     })
 })
 
-let hash = new L.Hash(map) // eslint-disable-line no-unused-vars
+const hash = new L.Hash(map) // eslint-disable-line no-unused-vars
 
 // Add Tangram scene layer if webgl present.
 // For debug reasons you can also just pass webgl=false in the params
@@ -97,32 +97,33 @@ if (detects.webgl && !(queryparams.webgl)) {
   L.tileLayer(tileUrl, {
     attribution: 'Map tiles by <a href="https://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
   }).addTo(map)
-
-  // GeoJSON boundary
-  const style = {
-    color: '#bbb',
-    fillColor: 'transparent',
-    weight: 4,
-    opacity: 0.5
-  }
-
-  window.fetch(BOUNDARY_GEOJSON)
-    .then(function (response) {
-      if (response.status !== 200) {
-        throw new Error(`status code: ${response.status}`)
-      }
-
-      return response.json()
-    })
-    .then(function (geojson) {
-      L.geoJson(geojson, {
-        style: style
-      }).addTo(map)
-    })
-    .catch(function (error) {
-      console.log('error getting boundary geojson: ' + error)
-    })
 }
+
+// GeoJSON boundary (using this instead of Tangram layer because of
+// bundling limitations)
+const style = {
+  color: '#bbb',
+  fillColor: 'transparent',
+  weight: 4,
+  opacity: 0.5
+}
+
+window.fetch(BOUNDARY_GEOJSON)
+  .then(async function (response) {
+    if (response.status !== 200) {
+      throw new Error(`status code: ${response.status}`)
+    }
+
+    return await response.json()
+  })
+  .then(function (geojson) {
+    L.geoJson(geojson, {
+      style
+    }).addTo(map)
+  })
+  .catch(function (error) {
+    console.log('error getting boundary geojson: ' + error)
+  })
 
 const districtStyle = {
   color: '#ff4444',
@@ -134,7 +135,7 @@ const districtStyle = {
 let districtLayer
 
 // Add Pelias geocoding plugin
-let geocoderOptions = {
+const geocoderOptions = {
   url: 'https://api.geocode.earth/v1',
   markers: {
     icon: L.divIcon({ className: 'point-marker' }),
@@ -164,8 +165,8 @@ window.geocoder = geocoder
 
 // Custom behavior on selecting a result
 geocoder.on('select', function (e) {
-  var label = e.feature.properties.label
-  var latlng = e.latlng
+  const label = e.feature.properties.label
+  const latlng = e.latlng
 
   selectLocation(latlng, label)
 })
@@ -204,7 +205,7 @@ window.setTimeout(function () {
     // Fire an event to hide the search box, which is empty
     // at this point so it looks weird
     geocoder._input.dispatchEvent(new window.KeyboardEvent('keyup', {
-      'cancelable': true
+      cancelable: true
     }))
   }
   if (queryparams.lat && queryparams.lng) {
@@ -225,7 +226,7 @@ function selectLocation (latlng, label) {
   displayCommunityBoard(latlng)
 
   // Set url
-  var querystring = '?query=' + encodeURIComponent(label) +
+  const querystring = '?query=' + encodeURIComponent(label) +
     '&lat=' + encodeURIComponent(latlng.lat) +
     '&lng=' + encodeURIComponent(latlng.lng)
   window.history.pushState({
@@ -248,7 +249,7 @@ function fillOutData (data) {
   dataEl.querySelector('.data.address').innerHTML = data.data.address.replace(/\n/g, '<br>')
   dataEl.querySelector('.data.phone').textContent = data.data.phone
 
-  let email = data.data.email
+  const email = data.data.email
   if (email) {
     dataEl.querySelector('.data.email').textContent = data.data.email
   } else {
@@ -260,8 +261,8 @@ function fillOutData (data) {
   const goAway = 'http://www.nyc.gov/cgi-bin/exit.pl?url='
   const websiteEl = document.querySelector('.data.website')
   if (data.data.website.href) {
-    let href = data.data.website.href.replace(goAway, '')
-    let anchorEl = document.createElement('a')
+    const href = data.data.website.href.replace(goAway, '')
+    const anchorEl = document.createElement('a')
     anchorEl.href = href
     anchorEl.appendChild(document.createTextNode(href))
     websiteEl.appendChild(anchorEl)
@@ -305,7 +306,7 @@ function addDistrictGeoToMap (geojson) {
   // Zoom to bounds
   // WSEN order (west, south, east, north)
   const bounds = bbox(geojson)
-  let fitOptions = {
+  const fitOptions = {
     paddingTopLeft: [250, 10],
     paddingBottomRight: [10, 10],
     animate: false

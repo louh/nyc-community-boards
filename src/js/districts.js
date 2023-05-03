@@ -17,14 +17,14 @@ const DATA_FILES = [
 ]
 
 // And, then for each data file, we combine them into one
-let districts = DATA_FILES.reduce((previous, current, index, all) => {
-  let boards = current.results.community_boards
-  let boroughId = getBoroughId(current.results.borough[0].label)
-  let edited = boards.map(board => {
+const districts = DATA_FILES.reduce((previous, current, index, all) => {
+  const boards = current.results.community_boards
+  const boroughId = getBoroughId(current.results.borough[0].label)
+  const edited = boards.map(board => {
     board.boroughId = boroughId
     return board
   })
-  let added = previous.concat(edited)
+  const added = previous.concat(edited)
   return added
 }, [])
 
@@ -46,9 +46,9 @@ export function getDistrictById (id) {
   // Return all the data
   if (scraped) {
     return {
-      id: id,
-      borough: borough,
-      boardNumber: boardNumber,
+      id,
+      borough,
+      boardNumber,
       label: borough + ' Community Board ' + boardNumber.toString(),
       data: scraped
     }
