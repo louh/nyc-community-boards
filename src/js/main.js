@@ -11,7 +11,7 @@ import { getDistrictById } from './districts'
 
 import TANGRAM_SCENE_OBJECT from '../scene.json'
 
-const BOUNDARY_GEOJSON = 'data/boundaries.geojson'
+const BOUNDARY_GEOJSON = new URL('../data/boundaries.geojson', import.meta.url)
 const SEARCH_API_KEY = 'ge-1793afb81c0a7784' // todo: get unique key
 
 // Query string parsing
@@ -97,32 +97,33 @@ if (detects.webgl && !(queryparams.webgl)) {
   L.tileLayer(tileUrl, {
     attribution: 'Map tiles by <a href="https://stamen.com">Stamen Design</a>, under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.'
   }).addTo(map)
-
-  // GeoJSON boundary
-  const style = {
-    color: '#bbb',
-    fillColor: 'transparent',
-    weight: 4,
-    opacity: 0.5
-  }
-
-  window.fetch(BOUNDARY_GEOJSON)
-    .then(function (response) {
-      if (response.status !== 200) {
-        throw new Error(`status code: ${response.status}`)
-      }
-
-      return response.json()
-    })
-    .then(function (geojson) {
-      L.geoJson(geojson, {
-        style
-      }).addTo(map)
-    })
-    .catch(function (error) {
-      console.log('error getting boundary geojson: ' + error)
-    })
 }
+
+// GeoJSON boundary (using this instead of Tangram layer because of
+// bundling limitations)
+const style = {
+  color: '#bbb',
+  fillColor: 'transparent',
+  weight: 4,
+  opacity: 0.5
+}
+
+window.fetch(BOUNDARY_GEOJSON)
+  .then(async function (response) {
+    if (response.status !== 200) {
+      throw new Error(`status code: ${response.status}`)
+    }
+
+    return await response.json()
+  })
+  .then(function (geojson) {
+    L.geoJson(geojson, {
+      style
+    }).addTo(map)
+  })
+  .catch(function (error) {
+    console.log('error getting boundary geojson: ' + error)
+  })
 
 const districtStyle = {
   color: '#ff4444',
