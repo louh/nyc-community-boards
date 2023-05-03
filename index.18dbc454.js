@@ -897,7 +897,7 @@ function getQueryParams() {
     return params;
 }
 
-},{"leaflet":"iFbO2","leaflet-geocoder-mapzen":"64qHw","leaflet-hash":"3crEa","@turf/bbox":"8j5IG","./store":"9NZPX","./detects":"593aU","./search":"4TESp","./districts":"jgR9a","../scene.json":"3fqW0","4daa1baba0a7690f":"jFgDv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iFbO2":[function(require,module,exports) {
+},{"leaflet":"iFbO2","leaflet-geocoder-mapzen":"64qHw","leaflet-hash":"3crEa","@turf/bbox":"8j5IG","./store":"9NZPX","./detects":"593aU","./search":"4TESp","./districts":"jgR9a","../scene.json":"3fqW0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","4daa1baba0a7690f":"jFgDv"}],"iFbO2":[function(require,module,exports) {
 /* @preserve
  * Leaflet 1.9.3, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2022 Vladimir Agafonkin, (c) 2010-2011 CloudMade
@@ -14953,7 +14953,7 @@ function findDistricts(latlng) {
     });
 }
 
-},{"topojson":"2tg3w","@turf/boolean-point-in-polygon":"89fKO","867f0e4c551f1295":"d02QH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2tg3w":[function(require,module,exports) {
+},{"topojson":"2tg3w","@turf/boolean-point-in-polygon":"89fKO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","867f0e4c551f1295":"d02QH"}],"2tg3w":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _topojsonClient = require("topojson-client");
