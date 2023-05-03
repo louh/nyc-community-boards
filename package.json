@@ -19,7 +19,6 @@
     "predeploy": "npm test && npm run build",
     "deploy": "gh-pages --dist dist"
   },
-  "main": "index.js",
   "dependencies": {
     "@turf/bbox": "6.5.0",
     "@turf/boolean-point-in-polygon": "6.5.0",
